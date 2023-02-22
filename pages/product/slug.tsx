@@ -1,11 +1,12 @@
 import { Button, Chip, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { ShopLayout } from '../../components';
+import { ShopLayout, ProductSlideShow } from '../../components';
 import { initialData } from '../../database/products';
+import { IProduct } from '../../interfaces';
 
 const product = initialData.products.find(p => {
   return p.slug === 'women_cropped_puffer_jacket';
-});
+}) as IProduct;
 
 const ProductPage = () => {
   return (
@@ -14,9 +15,11 @@ const ProductPage = () => {
       pageDescription="Product description"
     >
       <Grid container spacing={3}>
+        {/* ------------ SLIDESHOW ------------  */}
         <Grid item xs={12} sm={7}>
-          {/* <Slideshow /> */}
+          <ProductSlideShow images={ product.images } />
         </Grid>
+
         <Grid item xs={12} sm={5}>
           {/* ------------ TITLES ------------  */}
           <Box display="flex" flexDirection="column">
