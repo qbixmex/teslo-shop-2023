@@ -1,24 +1,18 @@
-import { Typography } from '@mui/material'
 import type { NextPage } from 'next'
-import Head from 'next/head'
+import { ShopLayout } from '../components';
+import { Typography } from '@mui/material';
 
 const Home: NextPage = () => {
   return (
-    <>
-      <Head>
-        <title>Teslo Shop</title>
-        <meta name="description" content="Excellent products with Teslo Shop" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <Typography
-          variant='h1'
-          sx={{ textAlign: 'center', mt: 2 }}
-        >Teslo Shop</Typography>
-      </main>
-    </>
+    <ShopLayout
+      title='Teslo Shop - Home'
+      pageDescription='Find the best product from Tesla'
+      robots='index, follow'
+    >
+      <Typography variant='h1' component='h1'>Shop</Typography>
+      <Typography variant='h2'>All Products</Typography>
+    </ShopLayout>
   )
-}
+};
 
 export default Home
