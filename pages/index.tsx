@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       </Box>
       <ProductList products={ initialData.products as any } />
     </ShopLayout>
-  )
+  );
 };
 
 export default Home;
