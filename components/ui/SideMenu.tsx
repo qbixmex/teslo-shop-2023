@@ -17,7 +17,7 @@ import VpnKeyIcon from "@mui/icons-material/VpnKeyOutlined";
 export const SideMenu = () => {
   return (
     <Drawer
-      open={true}
+      open={false}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all .5s easy-out" }}
     >
