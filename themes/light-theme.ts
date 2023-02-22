@@ -4,6 +4,9 @@ import { createTheme } from '@mui/material/styles';
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
+    background: {
+      default: '#eee',
+    },
     primary: {
       main: '#1E1E1E'
     },
@@ -24,7 +27,7 @@ export const lightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          backgroundColor: 'white',
+          backgroundColor: '#eee',
           height: 60
         },
       }
@@ -53,6 +56,8 @@ export const lightTheme = createTheme({
       },
       styleOverrides: {
         root: {
+          backgroundColor: '#eee',
+          color: '#222',
           textTransform: 'none',
           boxShadow: 'none',
           borderRadius: 10,

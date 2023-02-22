@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import Head from 'next/head';
 import styles from './ShopLayout.module.css';
+import { Navbar } from '../ui';
 
 type Props = {
   title: string;
@@ -39,16 +40,16 @@ export const ShopLayout: FC<Props> = (props) => {
       </Head>
 
       <nav>
-        {/* TODO: Navbar */}
+        <Navbar />
       </nav>
 
-      {/* TODO: Sidebar */}
+      {/* TODO: <Sidebar /> */}
 
       <main className={ styles.main }>
         { children }
       </main>
 
-      {/* TODO: Footer */}
+      {/* TODO: <Footer /> */}
     </>
   );
 };
