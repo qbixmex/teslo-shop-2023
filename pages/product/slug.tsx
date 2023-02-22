@@ -1,11 +1,11 @@
 import { Button, Chip, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { ShopLayout, ProductSlideShow } from '../../components';
+import { ShopLayout, ProductSlideShow, ItemCounter } from '../../components';
 import { initialData } from '../../database/products';
 import { IProduct } from '../../interfaces';
 
 const product = initialData.products.find(p => {
-  return p.slug === 'women_cropped_puffer_jacket';
+  return p.slug === 'women_chill_half_zip_cropped_hoodie';
 }) as IProduct;
 
 const ProductPage = () => {
@@ -38,7 +38,7 @@ const ProductPage = () => {
             {/* ------------ QUANTITY ------------  */}
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Quantity</Typography>
-              {/* <ItemCounter /> */}
+              <ItemCounter />
             </Box>
 
             {/* ------------ ADD TO CART ------------  */}
