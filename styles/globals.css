@@ -1,0 +1,123 @@
+:root {
+  --blue: #0d6efd;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #d63384;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #198754;
+  --teal: #20c997;
+  --cyan: #0dcaf0;
+  --black: #000;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --primary: #0d6efd;
+  --secondary: #6c757d;
+  --success: #198754;
+  --info: #0dcaf0;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --base00: #282c34;
+  --base01: #353b45;
+  --base02: #3e4451;
+  --base03: #868e96;
+  --base04: #565c64;
+  --base05: #abb2bf;
+  --base06: #b6bdca;
+  --base07: #d19a66;
+  --base08: #e06c75;
+  --base09: #d19a66;
+  --base0A: #e5c07b;
+  --base0B: #98c379;
+  --base0C: #56b6c2;
+  --base0D: #61afef;
+  --base0E: #c678dd;
+  --base0F: #be5046;
+  font-size: 16px;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+.blue { color: var(--blue) }
+.indigo { color: var(--indigo) }
+.purple { color: var(--purple) }
+.pink { color: var(--pink) }
+.red { color: var(--red) }
+.orange { color: var(--orange) }
+.yellow { color: var(--yellow) }
+.green { color: var(--green) }
+.teal { color: var(--teal) }
+.cyan { color: var(--cyan) }
+.black { color: var(--black) }
+.white { color: var(--white) }
+
+.gray { color: var(--gray) }
+.gray-dark { color: var(--gray-dark) }
+.gray-100 { color: var(--gray-100) }
+.gray-200 { color: var(--gray-200) }
+.gray-300 { color: var(--gray-300) }
+.gray-400 { color: var(--gray-400) }
+.gray-500 { color: var(--gray-500) }
+.gray-600 { color: var(--gray-600) }
+.gray-700 { color: var(--gray-700) }
+.gray-800 { color: var(--gray-800) }
+.gray-900 { color: var(--gray-900) }
+
+.base00 { color: var(--base00) }
+.base01 { color: var(--base01) }
+.base02 { color: var(--base02) }
+.base03 { color: var(--base03) }
+.base04 { color: var(--base04) }
+.base05 { color: var(--base05) }
+.base06 { color: var(--base06) }
+.base07 { color: var(--base07) }
+.base08 { color: var(--base08) }
+.base09 { color: var(--base09) }
+.base0A { color: var(--base0A) }
+.base0B { color: var(--base0B) }
+.base0C { color: var(--base0C) }
+.base0D { color: var(--base0D) }
+.base0E { color: var(--base0E) }
+.base0F { color: var(--base0F) }
+
+.center { text-align: center; }
+.left { text-align: left; }
+.right { text-align: right; }
