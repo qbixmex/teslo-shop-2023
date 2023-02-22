@@ -1,6 +1,6 @@
 import { Button, Chip, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { ShopLayout, ProductSlideShow, ItemCounter } from '../../components';
+import { ShopLayout, ProductSlideShow, ItemCounter, SizeSelector } from '../../components';
 import { initialData } from '../../database/products';
 import { IProduct } from '../../interfaces';
 
@@ -35,10 +35,16 @@ const ProductPage = () => {
               { `$ ${product?.price}.00` }
             </Typography>
 
-            {/* ------------ QUANTITY ------------  */}
             <Box sx={{ my: 2 }}>
-              <Typography variant='subtitle2'>Quantity</Typography>
+              {/* ------------ QUANTITY ------------  */}
+              <Typography variant='subtitle2' mb={1}>Quantity</Typography>
               <ItemCounter />
+              {/* ------------ SIZES ------------  */}
+              <Typography variant='subtitle2' mb={1}>Sizes</Typography>
+              <SizeSelector
+                // selectedSize={product.sizes[2]}
+                sizes={ product.sizes }
+              />
             </Box>
 
             {/* ------------ ADD TO CART ------------  */}
