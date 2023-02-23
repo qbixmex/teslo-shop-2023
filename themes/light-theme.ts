@@ -15,7 +15,7 @@ export const lightTheme = createTheme({
     },
     info: {
       main: '#eee',
-    }
+    },
   },
   components: {
     MuiLink: {
