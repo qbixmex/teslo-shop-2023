@@ -1,6 +1,6 @@
 .row-alignment {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .items {
   font-weight: 500;
