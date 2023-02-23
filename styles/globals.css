@@ -1,6 +1,7 @@
 :root {
   --blue: #274494;
   --red: #df2020;
+  --green: hsl(120, 50%, 40%);
 }
 
 body {
@@ -42,3 +43,5 @@ body {
 
 .blue { color: var(--blue) }
 .red { color: var(--red) }
+.green { color: var(--green) }
+.bold { font-weight: bold; }
