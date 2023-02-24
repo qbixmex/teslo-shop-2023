@@ -10,6 +10,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
   const [isHovered, setIsHovered] = useState(false);
   const imageNumber = useMemo(() => isHovered ? 1 : 0, [isHovered]);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
     <Grid
@@ -26,12 +27,17 @@ export const ProductCard: FC<Props> = ({ product }) => {
                 className={ isHovered ? 'fadeIn' : '' }
                 image={`products/${product.images[imageNumber]}` }
                 alt={product.title}
+                onLoad={ () => setIsImageLoaded(true) }
               />
             </Link>
           </NextLink>
         </CardActionArea>
       </Card>
-      <Box sx={{ mt: 1, px: 1 }} className='fadeIn'>
+      <Box className='fadeIn' sx={{
+        display: isImageLoaded ? 'block' : 'none',
+        mt: 1,
+        px: 1,
+      }}>
         <Typography fontWeight={700}>{ product.title }</Typography>
         <Typography
           fontWeight={500}
