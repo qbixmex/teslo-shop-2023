@@ -8,21 +8,19 @@ type Data =
   | IProduct;
 
 const handler = async (request: NextApiRequest, response: NextApiResponse<Data>) => {
-  const slug = request.query.slug as string;
-
   switch (request.method) {
     case 'GET':
-      return getProductBySlug(request, response, slug);
+      return getProductBySlug(request, response);
     default:
       return response.status(400).json({ message: 'Endpoint does not exist!' });
   }
 };
 
 const getProductBySlug = async (
-  _request: NextApiRequest,
+  request: NextApiRequest,
   response: NextApiResponse<Data>,
-  slug: string,
 ) => {
+  const slug = request.query.slug as string;
   await db.connect();
   const product = await Product
     .findOne({ slug })
