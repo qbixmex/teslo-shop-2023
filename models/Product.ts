@@ -1,11 +1,11 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
 import { IProduct } from '../interfaces';
 
 const productSchema = new Schema({
   description: { type: String, required: true },
   images: [{ type: String }],
-  inStock: { Type: Number, required: true, default: 0 },
-  price: { Type: Number, required: true, default: 0 },
+  inStock: { type: Number, required: true, default: 0 },
+  price: { type: Number, required: true, default: 0 },
   sizes: [{
     type: String,
     enum: {
@@ -13,9 +13,9 @@ const productSchema = new Schema({
       message: '{VALUE}: is not a valid size!'
     }
   }],
-  slug: { Type: String, required: true, unique: true },
+  slug: { type: String, required: true, unique: true },
   tags: [{ type: String }],
-  title: { Type: String, required: true },
+  title: { type: String, required: true },
   type: {
     type: String,
     enum: {
@@ -36,7 +36,6 @@ const productSchema = new Schema({
 
 // TODO: Create Index
 
-const Product: Model<IProduct> =
-  mongoose.models.Product || mongoose.model('Product', productSchema);
+const Product: Model<IProduct> = mongoose.models.Product || model('Product', productSchema);
 
 export default Product;
