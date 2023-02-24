@@ -1,0 +1,23 @@
+.title {
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--gray);
+}
+
+.item {
+  height: 650px;
+  width: 100%;
+}
+
+.link {
+  color: var(--blue);
+  border: solid 1px var(--blue);
+  padding: 5px 8px;
+  border-radius: 10px;
+  transition: all 0.25s ease-in-out;
+}
+
+.link:hover {
+  color: #fff;
+  background-color: var(--blue);
+}

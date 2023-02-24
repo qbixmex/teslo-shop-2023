@@ -1,9 +1,12 @@
 import NextLink from 'next/link';
-import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from "@mui/material";
-import { ShopLayout, CartList, OrderSummary } from "../../components";
-import styles from "./order.module.css";
+import {
+  Box, Card, CardContent, Chip,
+  Divider, Grid, Link, Typography
+} from '@mui/material';
+import { ShopLayout, CartList, OrderSummary } from '../../components';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import CreditScoreIcon from '@mui/icons-material/CreditScoreOutlined';
+import styles from './order.module.css';
 
 const OrderPage = () => {
   return (
@@ -15,7 +18,7 @@ const OrderPage = () => {
       <Typography
         variant="h1"
         component="h1"
-        className="gray"
+        className={styles.title}
       >Order: 123456789</Typography>
 
       { false ? (
@@ -29,7 +32,7 @@ const OrderPage = () => {
         ) : (
           <Chip
             sx={{ my: 2 }}
-            label="Already Payed"
+            label="Already Paid"
             variant="outlined"
             color="success"
             icon={<CreditScoreIcon />}
@@ -75,7 +78,7 @@ const OrderPage = () => {
                 <Typography variant='h1' component='p'>Pay</Typography>
                 <Chip
                   sx={{ my: 2 }}
-                  label="Already Payed"
+                  label="Already Paid"
                   variant="outlined"
                   color="success"
                   icon={<CreditScoreIcon />}
