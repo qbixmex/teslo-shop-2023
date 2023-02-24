@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { ProductList, ShopLayout } from '../components';
 import { Box, Typography } from '@mui/material';
 import { useProducts } from '../hooks';
+import { FullScreenLoading } from '../components/ui/FullScreenLoading';
 
 const HomePage: NextPage = () => {
 
@@ -19,7 +20,7 @@ const HomePage: NextPage = () => {
       </Box>
       {
         isLoading
-          ? <h1>Loading</h1>
+          ? <FullScreenLoading />
           : <ProductList products={ products } />
       }
     </ShopLayout>
