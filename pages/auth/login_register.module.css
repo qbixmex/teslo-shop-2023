@@ -1,0 +1,22 @@
+.box {
+  width: 380px;
+  padding: 10px 20px;
+}
+
+.title {
+  font-size: 2.4rem;
+  text-align: center;
+  font-weight: 300;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+.register-link {
+  display: flex;
+  justify-content: flex-end;  
+  color: var(--blue);
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
