@@ -1,6 +1,6 @@
 {
   "name": "teslo_shop",
-  "version": "2.5.1",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,7 +19,8 @@
     "next": "12.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-slideshow-image": "^4.2.1"
+    "react-slideshow-image": "^4.2.1",
+    "swr": "^2.0.4"
   },
   "devDependencies": {
     "@types/node": "18.14.0",
