@@ -1,18 +1,18 @@
-import { Button, Chip, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { NextPage, GetServerSideProps } from 'next'
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ShopLayout, ProductSlideShow, ItemCounter, SizeSelector } from '../../components';
-import { initialData } from '../../database/products';
 import { IProduct } from '../../interfaces';
+import { dbProducts } from '../../database';
 
-const product = initialData.products.find(p => {
-  return p.slug === 'women_chill_half_zip_cropped_hoodie';
-}) as IProduct;
+type Props = { product: IProduct };
 
-const ProductPage = () => {
+const ProductPage: NextPage<Props> = ({ product }) => {
   return (
     <ShopLayout
-      title={`${product?.title} - Teslo Shop`}
-      pageDescription="Product description"
+      title={`${product.title} - Teslo Shop`}
+      pageDescription={`${product.description.slice(0, 160)} ...`}
+      imageFullUrl={`http://localhost:3000/products/${product.images[0]}`}
+      robots="index, follow"
     >
       <Grid container spacing={3}>
         {/* ------------ SLIDESHOW ------------  */}
@@ -24,7 +24,7 @@ const ProductPage = () => {
           {/* ------------ TITLES ------------  */}
           <Box display="flex" flexDirection="column">
             <Typography variant="h1" component="h1">
-              { product?.title }
+              { product.title }
             </Typography>
 
             <Typography
@@ -32,7 +32,7 @@ const ProductPage = () => {
               component="h2"
               color="green"
             >
-              { `$ ${product?.price}.00` }
+              { `$ ${product.price}.00` }
             </Typography>
 
             <Box sx={{ my: 2 }}>
@@ -67,13 +67,31 @@ const ProductPage = () => {
 
             <Box sx={{ mt: 3 }}>
               <Typography variant='subtitle2' mb={2}>Description</Typography>
-              <Typography variant='body2'>{ product?.description }</Typography>
+              <Typography variant='body2'>{ product.description }</Typography>
             </Box>
           </Box>
         </Grid>
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { slug = '' } = params as { slug: string };
+  const product = await dbProducts.getProductBySlug(slug);
+
+  if (!product) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: { product }
+  };
 };
 
 export default ProductPage;
