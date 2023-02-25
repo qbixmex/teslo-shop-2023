@@ -1,4 +1,4 @@
-import { NextPage, GetServerSideProps } from 'next'
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ShopLayout, ProductSlideShow, ItemCounter, SizeSelector } from '../../components';
 import { IProduct } from '../../interfaces';
@@ -76,7 +76,16 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const slugs = await dbProducts.getAllProductsSlugs();
+
+  return {
+    paths: slugs.map(({slug}) => ({ params: { slug }})),
+    fallback: 'blocking',
+  }
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = '' } = params as { slug: string };
   const product = await dbProducts.getProductBySlug(slug);
 
@@ -84,14 +93,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
       redirect: {
         destination: '/',
-        permanent: false
+        permanent: false,
       }
     };
   }
 
   return {
-    props: { product }
-  };
+    props: { product },
+    revalidate: 60 * 60 * 24
+  }
 };
 
 export default ProductPage;
