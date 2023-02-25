@@ -48,22 +48,19 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             </Box>
 
             {/* ------------ ADD TO CART ------------  */}
-            { true && ( // TODO: Handle Logic to show this component
-              <Button color="secondary" className='circular-btn'>
-                Add Cart
-              </Button>
-            )}
-
-            {/* ------------ NO PRODUCTS ------------  */}
-            {
-              false && ( // TODO: Handle Logic to show this component
+            { (product.inStock !== 0)
+              ? (
+                <Button color="secondary" className='circular-btn'>
+                  Add Cart
+                </Button>
+              ) : (
                 <Chip
-                label="There's no available products"
-                color="error"
-                variant="outlined"
-                sx={{ mt: 2 }}
-              />
-            )}
+                  label="There's no available products"
+                  color="error"
+                  variant="outlined"
+                />
+              )
+            }
 
             <Box sx={{ mt: 3 }}>
               <Typography variant='subtitle2' mb={2}>Description</Typography>
