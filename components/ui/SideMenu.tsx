@@ -1,4 +1,4 @@
-import { useContext, useState, ChangeEvent } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box, Divider, Drawer, IconButton,
@@ -45,6 +45,7 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus
               type="text"
               placeholder="Search..."
               endAdornment={

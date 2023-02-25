@@ -4,6 +4,7 @@ import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { ProductList } from '../../components';
 import { dbProducts } from '../../database';
 import { IProduct } from '../../interfaces/products';
+import { capitalize } from '../../utils';
 
 type Props = {
   products: IProduct[];
@@ -14,7 +15,7 @@ type Props = {
 const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
   return (
     <ShopLayout
-      title={`Teslo Shop - ${query} products`}
+      title={`Teslo Shop - ${query} Products`}
       pageDescription={`Teslo Shop - ${query} products results`}
       robots='noindex, nofollow'
     >
@@ -25,13 +26,13 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
           foundProducts
             ? (
               <>
-                Search Term:&nbsp;
+                <span className="gray bold">Search Term:&nbsp;</span>
                 <span className="blue bold">&quot;{ query }&quot;</span>
               </>
             )
             : (
               <>
-                There&apos;s no products with search term:&nbsp;
+                <span className="red bold">There&apos;s no products with search term:&nbsp;</span>
                 <span className="blue bold">&quot;{ query }&quot;</span>
               </>
             )
@@ -64,9 +65,9 @@ export const getServerSideProps: GetServerSideProps = async ({params}) => {
     props: {
       products,
       foundProducts,
-      query,
+      query: capitalize(query),
     }
   }
-}
+};
 
 export default SearchPage;
