@@ -1,13 +1,13 @@
-import { useRouter } from 'next/router';
+import { GetServerSideProps, NextPage } from 'next';
 import { Box, Typography } from '@mui/material';
-import { FullScreenLoading, ProductList } from '../../components';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { useProducts } from '../../hooks';
+import { ProductList } from '../../components';
+import { dbProducts } from '../../database';
+import { IProduct } from '../../interfaces/products';
 
-const SearchPage = () => {
-  const { asPath } = useRouter();
-  const { products, isLoading } = useProducts(asPath);
+type Props = { products: IProduct[] };
 
+const SearchPage: NextPage<Props> = ({ products }) => {
   return (
     <ShopLayout
       title='xxxx Products'
@@ -18,13 +18,30 @@ const SearchPage = () => {
         <Typography variant='h1' component='h1'>Search Product</Typography>
         <Typography variant='h2'>ABC Products</Typography>
       </Box>
-      {
-        isLoading
-          ? <FullScreenLoading />
-          : <ProductList products={ products } />
-      }
+      <ProductList products={ products } />
     </ShopLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
+  const { query = '' } = params as { query: string };
+
+  if (query.length === 0) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true,
+      }
+    };
+  }
+
+  let products = await dbProducts.getProductByTerm(query);
+
+  // TODO: Return other products if no results were found
+
+  return {
+    props: { products }
+  }
+}
 
 export default SearchPage;
