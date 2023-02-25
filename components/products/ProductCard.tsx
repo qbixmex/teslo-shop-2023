@@ -24,10 +24,10 @@ export const ProductCard: FC<Props> = ({ product }) => {
             <Link>
               <CardMedia
                 component="img"
-                className={ isHovered ? 'fadeIn' : '' }
-                image={`products/${product.images[imageNumber]}` }
+                className={isHovered ? 'fadeIn' : ''}
+                image={`/products/${product.images[imageNumber]}`}
                 alt={product.title}
-                onLoad={ () => setIsImageLoaded(true) }
+                onLoad={() => setIsImageLoaded(true)}
               />
             </Link>
           </NextLink>
@@ -38,11 +38,11 @@ export const ProductCard: FC<Props> = ({ product }) => {
         mt: 1,
         px: 1,
       }}>
-        <Typography fontWeight={700}>{ product.title }</Typography>
+        <Typography fontWeight={700}>{product.title}</Typography>
         <Typography
           fontWeight={500}
-          color={ 'green' }
-        >{ `$ ${product.price}.00` }</Typography>
+          color={'green'}
+        >{`$ ${product.price}.00`}</Typography>
       </Box>
     </Grid>
   );
