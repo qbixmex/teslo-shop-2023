@@ -6,7 +6,12 @@ type CartActionType =
       type: 'Cart - Load Cart from Cookies | storage',
       payload: ICartProduct[]
     }
-  | { type: 'Cart - Add Product', payload: ICartProduct };
+  | {
+    type: 'Cart - Update products in cart',
+    payload: {
+      products: ICartProduct[],
+    },
+  };
 
 export const cartReducer = (state: CartState, action: CartActionType): CartState => {
   switch(action.type) {
@@ -15,10 +20,12 @@ export const cartReducer = (state: CartState, action: CartActionType): CartState
         ...state,
         // TODO: Implementation
       };
-    case 'Cart - Add Product':
+    case 'Cart - Update products in cart':
       return {
         ...state,
-        // TODO: Implementation
+        cart: [
+          ...action.payload.products,
+        ],
       };
     default:
       return state;
