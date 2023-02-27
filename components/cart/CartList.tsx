@@ -13,11 +13,17 @@ type Props = {
 };
 
 export const CartList = ({editable = false }: Props) => {
-  const { cart } = useContext(CartContext);
+  const { cart, updateCartQuantity } = useContext(CartContext);
+
+  const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
+    product.quantity = newQuantityValue;
+    updateCartQuantity(product);
+  };
+
   return (
     <>
       {cart.map((product) => (
-        <Grid container key={product.slug} spacing={2} my={1}>
+        <Grid container key={product._id + product.size } spacing={2} my={1}>
           <Grid item xs={3}>
             <NextLink href={`/product/${product.slug}`} passHref>
               <Link>
@@ -38,7 +44,7 @@ export const CartList = ({editable = false }: Props) => {
               </Typography>
               <Typography variant="body1">
                 Size:&nbsp;
-                <span className="blue">M</span>
+                <span className="blue">{product.size}</span>
               </Typography>
               {
                 editable
@@ -46,7 +52,7 @@ export const CartList = ({editable = false }: Props) => {
                       <ItemCounter
                         currentValue={product.quantity}
                         maxValue={10}
-                        updateQuantity={ () => {} }
+                        updateQuantity={ (newValue) => onNewCartQuantityValue(product, newValue) }
                       />
                     )
                   : (
