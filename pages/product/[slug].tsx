@@ -1,12 +1,29 @@
+import { useState } from 'react';
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ShopLayout, ProductSlideShow, ItemCounter, SizeSelector } from '../../components';
-import { IProduct } from '../../interfaces';
+import { IProduct, ICartProduct, ISize } from '../../interfaces';
 import { dbProducts } from '../../database';
 
 type Props = { product: IProduct };
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    price:product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1,
+  });
+
+  const onSelectedSize = (size: ISize) => {
+    setTempCartProduct(currentProduct => ({ ...currentProduct, size }));
+  };
+
   return (
     <ShopLayout
       title={`${product.title} - Teslo Shop`}
@@ -42,8 +59,9 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               {/* ------------ SIZES ------------  */}
               <Typography variant='subtitle2' mb={1}>Sizes</Typography>
               <SizeSelector
-                // selectedSize={product.sizes[2]}
-                sizes={ product.sizes }
+                selectedSize={tempCartProduct.size}
+                sizes={product.sizes}
+                onClick={onSelectedSize}
               />
             </Box>
 
@@ -51,7 +69,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             { (product.inStock !== 0)
               ? (
                 <Button color="secondary" className='circular-btn'>
-                  Add Cart
+                  {
+                    tempCartProduct.size
+                      ? 'Add Cart'
+                      : 'Select Size'
+                  }
                 </Button>
               ) : (
                 <Chip

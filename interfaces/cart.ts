@@ -2,9 +2,9 @@ import { ISize, ValidGenders } from "./";
 
 export interface ICartProduct {
   _id: string;
-  images: string;
+  image: string;
   price: number;
-  size: ISize;
+  size?: ISize;
   slug: string;
   title: string;
   gender: ValidGenders;
