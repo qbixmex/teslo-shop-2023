@@ -1,3 +1,3 @@
-export * from './cartContext';
+export * from './CartContext';
 export * from './CartProvider';
 export * from './cartReducer';

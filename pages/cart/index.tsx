@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { CartList, OrderSummary } from '../../components';
+
 const CartPage = () => {
   return (
     <ShopLayout
