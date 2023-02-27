@@ -24,6 +24,14 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     setTempCartProduct(currentProduct => ({ ...currentProduct, size }));
   };
 
+  const onAddProduct = () => {
+    console.table(tempCartProduct);
+  };
+
+  const onUpdateQuantity = (quantity: number) => {
+    setTempCartProduct(currentProduct => ({ ...currentProduct, quantity }));
+  };
+
   return (
     <ShopLayout
       title={`${product.title} - Teslo Shop`}
@@ -53,9 +61,15 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             </Typography>
 
             <Box sx={{ my: 2 }}>
+
               {/* ------------ QUANTITY ------------  */}
               <Typography variant='subtitle2' mb={1}>Quantity</Typography>
-              <ItemCounter />
+              <ItemCounter
+                currentValue={tempCartProduct.quantity}
+                updateQuantity={onUpdateQuantity}
+                maxValue={ (product.inStock > 5) ? 5 : product.inStock }
+              />
+
               {/* ------------ SIZES ------------  */}
               <Typography variant='subtitle2' mb={1}>Sizes</Typography>
               <SizeSelector
@@ -63,12 +77,17 @@ const ProductPage: NextPage<Props> = ({ product }) => {
                 sizes={product.sizes}
                 onClick={onSelectedSize}
               />
+
             </Box>
 
             {/* ------------ ADD TO CART ------------  */}
             { (product.inStock !== 0)
               ? (
-                <Button color="secondary" className='circular-btn'>
+                <Button
+                  color="secondary"
+                  className='circular-btn'
+                  onClick={onAddProduct}
+                >
                   {
                     tempCartProduct.size
                       ? 'Add Cart'
