@@ -3,6 +3,7 @@ import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
+import { validations } from '../../utils';
 
 type FormData = {
   email: string;
@@ -21,7 +22,7 @@ const LoginPage = () => {
       title="Teslo Shop - Login"
       pageDescription="Login with your credentials"
     >
-      <form onSubmit={ handleSubmit(onLoginUser) }>
+      <form onSubmit={ handleSubmit(onLoginUser) } noValidate>
         <Box className={styles.box}>
           <Typography component="h1" className={styles.title}>Login Session</Typography>
           <Grid container spacing={2}>
@@ -31,7 +32,14 @@ const LoginPage = () => {
                 label="Email" 
                 variant="filled" 
                 fullWidth
-                { ...register('email') }
+                {
+                  ...register('email', {
+                    required: 'Field is required!',
+                    validate: (email) => validations.isEmail(email),
+                  })
+                }
+                error={ !!errors.email }
+                helperText={ errors.email?.message }
               />
             </Grid>
             <Grid item xs={12}>
@@ -40,7 +48,17 @@ const LoginPage = () => {
                 type="password" 
                 variant="filled" 
                 fullWidth
-                { ...register('password') }
+                {
+                  ...register('password', {
+                    required: 'Field is required!',
+                    minLength: {
+                      value: 8,
+                      message: 'You must type at least 8 characters long!'
+                    }
+                  })
+                }
+                error={ !!errors.password }
+                helperText={ errors.password?.message }
               />
             </Grid>
             <Grid item xs={12}>
