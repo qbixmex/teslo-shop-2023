@@ -1,9 +1,11 @@
 import NextLink from 'next/link';
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
 import { validations } from '../../utils';
+import tesloAPI from '../../api/tesloAPI';
 
 type FormData = {
   email: string;
@@ -13,8 +15,14 @@ type FormData = {
 const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  const onLoginUser = (data: FormData) => {
-    console.table(data);
+  const onLoginUser = async ({ email, password }: FormData) => {
+    try {
+      const { data } = await tesloAPI.post('/users/login', { email, password });
+      const { token, user } = data;
+      console.log({ token, user });
+    } catch (error) {
+      console.log('Error on credentials');
+    }
   };
 
   return (
