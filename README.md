@@ -64,6 +64,14 @@ __Edit__ ```.env```
 MONGO_URL=mongodb://localhost:27017/teslodb
 # Put your "Tax Rate"
 NEXT_PUBLIC_TAX_RATE=0.12
+JWT_SECRET_SEED=super_secret_key
+```
+
+__You can generate a very strong secret seed with node crypto module__
+
+```bash
+node
+require('crypto').randomBytes(64).toString('hex');
 ```
 
 ## Seed Database
