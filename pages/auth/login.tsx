@@ -1,11 +1,12 @@
+import { useState } from 'react';
 import NextLink from 'next/link';
-import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
 import { validations } from '../../utils';
 import tesloAPI from '../../api/tesloAPI';
+import ErrorIcon from '@mui/icons-material/ErrorOutline';
 
 type FormData = {
   email: string;
@@ -14,15 +15,20 @@ type FormData = {
 
 const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [showError, setShowError] = useState(false);
 
   const onLoginUser = async ({ email, password }: FormData) => {
+    setShowError(false);
     try {
       const { data } = await tesloAPI.post('/users/login', { email, password });
       const { token, user } = data;
       console.log({ token, user });
     } catch (error) {
       console.log('Error on credentials');
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
     }
+    // TODO: Navigate to previous user screen or home page
   };
 
   return (
@@ -33,6 +39,21 @@ const LoginPage = () => {
       <form onSubmit={ handleSubmit(onLoginUser) } noValidate>
         <Box className={styles.box}>
           <Typography component="h1" className={styles.title}>Login Session</Typography>
+
+          <Box
+            sx={{
+              display: showError ? 'flex' : 'none',
+              justifyContent: 'center'
+            }}
+          >
+            <Chip
+              label={`User not found check "email" or "password"`}
+              color="error"
+              icon={ <ErrorIcon /> }
+              sx={{ mb: 3 }}
+            />
+          </Box>
+
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField 
@@ -76,6 +97,7 @@ const LoginPage = () => {
                 className="circular-btn"
                 size="large"
                 fullWidth
+                disabled={ showError ? true : false }
               >
                 Login
               </Button>
