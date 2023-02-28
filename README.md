@@ -62,6 +62,8 @@ __Edit__ ```.env```
 
 ```
 MONGO_URL=mongodb://localhost:27017/teslodb
+# Put your "Tax Rate"
+NEXT_PUBLIC_TAX_RATE=0.12
 ```
 
 ## Seed Database
