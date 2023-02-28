@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
 import { validations } from '../../utils';
-import tesloAPI from '../../api/tesloAPI';
+import { AuthContext } from '../../context';
 
 type FormData = {
   email: string;
@@ -14,21 +15,24 @@ type FormData = {
 };
 
 const LoginPage = () => {
+  const router = useRouter();
+  const { loginUser } = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-    try {
-      const { data } = await tesloAPI.post('/users/login', { email, password });
-      const { token, user } = data;
-      console.log({ token, user });
-    } catch (error) {
-      console.log('Error on credentials');
+
+    const isValidLogin = await loginUser(email, password);
+
+    if (!isValidLogin) {
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
+      return;
     }
+    
     // TODO: Navigate to previous user screen or home page
+    router.replace('/');
   };
 
   return (
