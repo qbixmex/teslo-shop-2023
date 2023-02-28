@@ -10,3 +10,10 @@ export interface ICartProduct {
   gender: ValidGenders;
   quantity: number;
 }
+
+export interface ICartSummary {
+  numberOfItems: number;
+  subtotal: number;
+  tax: number;
+  total: number;
+}

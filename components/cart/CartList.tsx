@@ -7,6 +7,7 @@ import {
 import { CartContext } from '../../context';
 import { ItemCounter } from "../ui";
 import { ICartProduct } from '../../interfaces';
+import { currency } from '../../utils';
 
 type Props = {
   editable?: boolean;
@@ -77,7 +78,7 @@ export const CartList = ({editable = false }: Props) => {
             <Typography
               className="blue"
               fontWeight="600"
-            >$ {product.price}</Typography>
+            >{ currency.format(product.price) }</Typography>
             {
               editable && (
                 <Button

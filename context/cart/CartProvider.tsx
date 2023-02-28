@@ -1,14 +1,21 @@
 import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
 import Cookie from 'js-cookie';
 import { CartContext, cartReducer } from './';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, ICartSummary } from '../../interfaces';
 
 export type CartState = {
   cart: ICartProduct[];
+  cartSummary: ICartSummary;
 };
 
 const CART_INITIAL_STATE: CartState = {
   cart: [],
+  cartSummary: {
+    numberOfItems: 0,
+    subtotal: 0,
+    tax: 0,
+    total: 0,
+  }
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -50,14 +57,17 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE ?? 0);
 
-    const orderSummary = {
-      numberOfItems,
-      subtotal,
-      tax: subtotal * taxRate,
-      total: subtotal * (1 + taxRate),
-    };
-
-    console.table(orderSummary);
+    dispatch({
+      type: 'Cart - Update order summary',
+      payload: {
+        cartSummary: {
+          numberOfItems,
+          subtotal,
+          tax: subtotal * taxRate,
+          total: subtotal * (1 + taxRate),
+        }
+      }
+    });
   }, [state.cart]);
 
   const addProductToCart = (product: ICartProduct) => {

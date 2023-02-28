@@ -6,6 +6,7 @@ import { IProduct, ICartProduct, ISize } from '../../interfaces';
 import { CartContext } from '../../context';
 import { dbProducts } from '../../database';
 import { ShopLayout, ProductSlideShow, ItemCounter, SizeSelector } from '../../components';
+import { currency } from '../../utils';
 
 type Props = { product: IProduct };
 
@@ -65,7 +66,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               component="h2"
               color="green"
             >
-              { `$ ${product.price}.00` }
+              { currency.format(product.price) }
             </Typography>
 
             <Box sx={{ my: 2 }}>

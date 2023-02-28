@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import { Card, CardActionArea, CardMedia, Chip, Grid, Link, Typography } from '@mui/material';
 import { IProduct } from '../../interfaces';
 import { Box } from '@mui/system';
+import { currency } from '../../utils';
 
 type Props = { product: IProduct }
 
@@ -51,7 +52,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         <Typography
           fontWeight={500}
           color={'green'}
-        >{`$ ${product.price}.00`}</Typography>
+        >{ currency.format(product.price) }</Typography>
       </Box>
     </Grid>
   );
