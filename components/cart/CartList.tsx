@@ -13,7 +13,11 @@ type Props = {
 };
 
 export const CartList = ({editable = false }: Props) => {
-  const { cart, updateCartQuantity } = useContext(CartContext);
+  const {
+    cart,
+    updateCartQuantity,
+    removeCartProduct,
+  } = useContext(CartContext);
 
   const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
     product.quantity = newQuantityValue;
@@ -76,7 +80,12 @@ export const CartList = ({editable = false }: Props) => {
             >$ {product.price}</Typography>
             {
               editable && (
-                <Button variant="outlined" color="error" sx={{ mt: 1 }}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={{ mt: 1 }}
+                  onClick={ () => removeCartProduct(product) }
+                >
                   remove
                 </Button>
               )
