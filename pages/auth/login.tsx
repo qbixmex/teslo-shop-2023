@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
 import { validations } from '../../utils';
 import tesloAPI from '../../api/tesloAPI';
-import ErrorIcon from '@mui/icons-material/ErrorOutline';
 
 type FormData = {
   email: string;
