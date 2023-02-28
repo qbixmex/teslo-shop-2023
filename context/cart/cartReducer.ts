@@ -47,14 +47,6 @@ export const cartReducer = (state: CartState, action: CartActionType): CartState
     case 'Cart - Remove product in cart':
       return {
         ...state,
-        //? ALTERNATIVE
-        //? cart: state.cart.filter(product => {
-        //?   return (
-        //?     product._id === action.payload.product._id &&
-        //?     product.size === action.payload.product.size
-        //?   ) ? false : true;
-        //? })
-
         cart: state.cart.filter(product => !(
             product._id === action.payload.product._id &&
             product.size === action.payload.product.size

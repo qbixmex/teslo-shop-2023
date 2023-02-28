@@ -39,6 +39,27 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [state.cart, isMounted]);
 
+  useEffect(() => {
+    const numberOfItems = state.cart.reduce((prevQuantity, currentProduct) => {
+      return prevQuantity + currentProduct.quantity;
+    }, 0);
+
+    const subtotal = state.cart.reduce((prevSubTotal, currentProduct) => {
+      return prevSubTotal + (currentProduct.price * currentProduct.quantity);
+    }, 0);
+
+    const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE ?? 0);
+
+    const orderSummary = {
+      numberOfItems,
+      subtotal,
+      tax: subtotal * taxRate,
+      total: subtotal * (1 + taxRate),
+    };
+
+    console.table(orderSummary);
+  }, [state.cart]);
+
   const addProductToCart = (product: ICartProduct) => {
     const productInCart = state.cart.some(p => p._id === product._id);
     const productInCartButDifferentSize = state.cart.some(p => {
