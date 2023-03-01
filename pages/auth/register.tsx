@@ -35,8 +35,8 @@ const RegisterPage = () => {
       return;
     }
 
-    // TODO: Navigate to previous user screen or home page
-    router.replace('/');
+    const destination = router.query.page?.toString() || '/'; 
+    router.replace(destination);
   };
 
   return (
@@ -132,7 +132,14 @@ const RegisterPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} className={styles['register-link']}>
-              <NextLink href="/auth/login" passHref>
+              <NextLink
+                href={
+                  router.query.page
+                    ? `/auth/login?page=${router.query.page}`
+                    : '/auth/login'
+                }
+                passHref
+              >
                 <Link>Do you already have an account ?</Link>
               </NextLink>
             </Grid>

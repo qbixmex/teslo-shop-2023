@@ -35,6 +35,10 @@ const LoginPage = () => {
     router.replace(destination);
   };
 
+  const navigateTo = (url: string) => {
+    router.push(url);
+  };
+
   return (
     <AuthLayout
       title="Teslo Shop - Login"
@@ -109,7 +113,14 @@ const LoginPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} className={styles['register-link']}>
-              <NextLink href="/auth/register" passHref>
+              <NextLink
+                href={
+                  router.query.page
+                    ? `/auth/register?page=${router.query.page}`
+                    : '/auth/register'
+                }
+                passHref
+              >
                 <Link>Create an account</Link>
               </NextLink>
             </Grid>
