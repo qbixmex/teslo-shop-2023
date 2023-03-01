@@ -45,6 +45,7 @@ const CartPage = () => {
                   className="circular-btn"
                   color="secondary"
                   fullWidth
+                  onClick={ () => router.push('/checkout/address') }
                 >Checkout</Button>
               </Box>
             </CardContent>
