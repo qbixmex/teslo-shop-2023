@@ -31,8 +31,8 @@ const LoginPage = () => {
       return;
     }
     
-    // TODO: Navigate to previous user screen or home page
-    router.replace('/');
+    const destination = router.query.page?.toString() || '/'; 
+    router.replace(destination);
   };
 
   return (
