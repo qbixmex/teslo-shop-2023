@@ -59,29 +59,29 @@ const AddressPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { token = '' } = context.req.cookies;
-  let isValidToken = false;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { token = '' } = context.req.cookies;
+//   let isValidToken = false;
 
-  try {
-    await jwt.isValidToken(token);
-    isValidToken = true;
-  } catch (error) {
-    isValidToken = false;
-  }
+//   try {
+//     await jwt.isValidToken(token);
+//     isValidToken = true;
+//   } catch (error) {
+//     isValidToken = false;
+//   }
 
-  if (!isValidToken) {
-    return {
-      redirect: {
-        destination: '/auth/login?page=/checkout/address',
-        permanent: false,
-      }
-    }
-  }
+//   if (!isValidToken) {
+//     return {
+//       redirect: {
+//         destination: '/auth/login?page=/checkout/address',
+//         permanent: false,
+//       }
+//     }
+//   }
 
-  return {
-    props: {}
-  }
-}
+//   return {
+//     props: {}
+//   }
+// };
 
 export default AddressPage;
