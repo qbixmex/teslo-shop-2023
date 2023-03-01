@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { AuthLayout } from '../../components';
 import styles from './login_register.module.css';
 import { AuthContext } from '../../context';
-import { tesloAPI } from '../../api';
 import { validations } from '../../utils';
 
 type FormData = {
