@@ -82,5 +82,13 @@ export const countries = [
   {
     name: 'Nicaragua',
     code: 'NIC'
+  },
+  {
+    name: 'United States',
+    code: 'USA'
+  },
+  {
+    name: 'Canada',
+    code: 'CAN'
   }
 ];

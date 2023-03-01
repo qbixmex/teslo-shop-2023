@@ -1,5 +1,5 @@
 import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 import { CartContext, cartReducer } from './';
 import { ICartProduct, ICartSummary, ShippingAddress } from '../../interfaces';
 
@@ -29,7 +29,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (!isMounted) {
       try {
-        const productsInCart = JSON.parse(Cookie.get('cart') ?? '[]');
+        const productsInCart = JSON.parse(Cookies.get('cart') ?? '[]');
         dispatch({
           type: 'Cart - Load Cart from Cookies | storage',
           payload: { products: productsInCart }
@@ -45,8 +45,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [isMounted]);
 
   useEffect(() => {
-    if (Cookie.get('address')) {
-      const shippingAddress = JSON.parse(Cookie.get('address')!) as ShippingAddress;
+    if (Cookies.get('address')) {
+      const shippingAddress = JSON.parse(Cookies.get('address')!) as ShippingAddress;
       dispatch({
         type: 'Cart - Load address from cookies',
         payload: { shippingAddress }
@@ -56,7 +56,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (isMounted) {
-      Cookie.set('cart', JSON.stringify(state.cart));
+      Cookies.set('cart', JSON.stringify(state.cart));
     }
   }, [state.cart, isMounted]);
 
@@ -132,6 +132,14 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch({ type: 'Cart - Remove product in cart', payload: { product } });
   };
 
+  const updateAddress = (shippingAddress: ShippingAddress) => {
+    Cookies.set('address', JSON.stringify(shippingAddress));
+    dispatch({
+      type: 'Cart - Update Shipping Address',
+      payload: { shippingAddress }
+    });
+  };
+
   return (
     <CartContext.Provider value={{
       ...state,
@@ -139,6 +147,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       addProductToCart,
       updateCartQuantity,
       removeCartProduct,
+      updateAddress,
     }}>
       { children }
     </CartContext.Provider>

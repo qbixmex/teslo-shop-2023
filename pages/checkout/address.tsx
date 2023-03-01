@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box, Button, FormControl, Grid,
   MenuItem, TextField, Typography
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import Cookies from 'js-cookie';
+
+import { CartContext } from '../../context';
+import { ShippingAddress } from '../../interfaces';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { countries } from '../../utils';
-import Cookies from 'js-cookie';
-import { ShippingAddress } from '../../interfaces';
 
 const initialData: ShippingAddress = {
   firstName: '',
@@ -30,13 +32,13 @@ const getAddressFromCookies = (): ShippingAddress => {
 
 const AddressPage = () => {
   const router = useRouter();
+  const { updateAddress } = useContext(CartContext);
   const { register, handleSubmit, formState: { errors } } = useForm<ShippingAddress>({
     defaultValues: getAddressFromCookies(),
   });
-  const onSubmitAddress = (data: ShippingAddress) => {
-    Cookies.set('address', JSON.stringify(data));
 
-    // const destination = router.query.page?.toString() || '/'; 
+  const onSubmitAddress = (data: ShippingAddress) => {
+    updateAddress(data);
     router.push('/checkout/summary');
   };
 
