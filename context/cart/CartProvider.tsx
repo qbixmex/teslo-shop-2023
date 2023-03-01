@@ -1,12 +1,13 @@
 import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
 import Cookie from 'js-cookie';
 import { CartContext, cartReducer } from './';
-import { ICartProduct, ICartSummary } from '../../interfaces';
+import { ICartProduct, ICartSummary, ShippingAddress } from '../../interfaces';
 
 export type CartState = {
   isLoaded: boolean;
   cart: ICartProduct[];
   cartSummary: ICartSummary;
+  shippingAddress?: ShippingAddress;
 };
 
 const CART_INITIAL_STATE: CartState = {
@@ -17,7 +18,8 @@ const CART_INITIAL_STATE: CartState = {
     subtotal: 0,
     tax: 0,
     total: 0,
-  }
+  },
+  shippingAddress: undefined,
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -41,6 +43,16 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
   }, [isMounted]);
+
+  useEffect(() => {
+    if (Cookie.get('address')) {
+      const shippingAddress = JSON.parse(Cookie.get('address')!) as ShippingAddress;
+      dispatch({
+        type: 'Cart - Load address from cookies',
+        payload: { shippingAddress }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (isMounted) {

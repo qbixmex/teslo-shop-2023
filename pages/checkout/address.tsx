@@ -1,45 +1,41 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
-  Box, Button, Chip, FormControl, Grid,
-  MenuItem, Select, TextField, Typography
+  Box, Button, FormControl, Grid,
+  MenuItem, TextField, Typography
 } from '@mui/material';
-import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { countries } from '../../utils';
 import Cookies from 'js-cookie';
+import { ShippingAddress } from '../../interfaces';
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  address: string;
-  address2?: string;
-  zip: string;
-  city: string;
-  country: string;
-  phone: string;
+const initialData: ShippingAddress = {
+  firstName: '',
+  lastName: '',
+  address: '',
+  address2: '',
+  zip: '',
+  city: '',
+  country: countries[4].code,
+  phone: '',
+};
+
+const getAddressFromCookies = (): ShippingAddress => {
+  if (Cookies.get('address')) {
+    return JSON.parse(Cookies.get('address')!);
+  }
+  return initialData;
 };
 
 const AddressPage = () => {
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    defaultValues: {
-      firstName: 'Daniel',
-      lastName: 'González',
-      address: 'Santander #2479',
-      address2: '',
-      zip: '44220',
-      city: 'Guadalajara',
-      country: countries[4].code,
-      phone: '3314689721',
-    }
+  const { register, handleSubmit, formState: { errors } } = useForm<ShippingAddress>({
+    defaultValues: getAddressFromCookies(),
   });
-  const [ showError, setShowError ] = useState(false);
-
-  const onSubmitAddress = (data: FormData) => {
+  const onSubmitAddress = (data: ShippingAddress) => {
     Cookies.set('address', JSON.stringify(data));
-    
+
     // const destination = router.query.page?.toString() || '/'; 
     router.push('/checkout/summary');
   };
@@ -51,20 +47,6 @@ const AddressPage = () => {
       robots="noindex, nofollow"
     >
       <Typography variant='h1' component="h1" mb={2}>Address</Typography>
-
-      <Box
-        sx={{
-          display: showError ? 'flex' : 'none',
-          justifyContent: 'center'
-        }}
-      >
-        <Chip
-          label={`There are errors in the form`}
-          color="error"
-          icon={ <ErrorIcon /> }
-          sx={{ mb: 3 }}
-        />
-      </Box>
 
       <form onSubmit={handleSubmit(onSubmitAddress)}>
         <Grid container spacing={2}>

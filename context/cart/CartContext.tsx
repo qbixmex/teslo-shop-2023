@@ -1,10 +1,11 @@
 import { createContext } from 'react';
-import { ICartProduct, ICartSummary } from '../../interfaces';
+import { ICartProduct, ICartSummary, ShippingAddress } from '../../interfaces';
 
 type ContextProps = {
   isLoaded:  boolean;
   cart: ICartProduct[];
   cartSummary: ICartSummary;
+  shippingAddress?: ShippingAddress;
   // Methods
   addProductToCart: (product: ICartProduct) => void;
   updateCartQuantity: (product: ICartProduct) => void;
