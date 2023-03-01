@@ -4,11 +4,13 @@ import { CartContext, cartReducer } from './';
 import { ICartProduct, ICartSummary } from '../../interfaces';
 
 export type CartState = {
+  isLoaded: boolean;
   cart: ICartProduct[];
   cartSummary: ICartSummary;
 };
 
 const CART_INITIAL_STATE: CartState = {
+  isLoaded: false,
   cart: [],
   cartSummary: {
     numberOfItems: 0,

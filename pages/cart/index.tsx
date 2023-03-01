@@ -1,9 +1,25 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { CartList, OrderSummary } from '../../components';
+import { CartContext } from '../../context';
 
 const CartPage = () => {
+  const { isLoaded, cart } = useContext(CartContext);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && cart.length === 0 ) {
+      router.replace('/cart/empty');
+    }
+  }, [isLoaded, cart, router]);
+
+  if (!isLoaded || cart.length === 0) {
+    return (<Box></Box>);
+  }
+
   return (
     <ShopLayout
       title='Teslo Shop - Cart'
