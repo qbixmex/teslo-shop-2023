@@ -14,7 +14,7 @@ export const OrderSummary = () => {
       </Grid>
       <Grid item xs={6} className={styles['row-alignment']}>
         <Typography className={styles.items}>
-          { cartSummary.numberOfItems } item{ cartSummary.numberOfItems > 1 ? 's' : '' }
+          { cartSummary.numberOfItems } product{ cartSummary.numberOfItems > 1 ? 's' : '' }
         </Typography>
       </Grid>
       <Grid item xs={6}>

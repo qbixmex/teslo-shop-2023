@@ -32,7 +32,7 @@ const getAddressFromCookies = (): ShippingAddress => {
 
 const AddressPage = () => {
   const router = useRouter();
-  const { updateAddress } = useContext(CartContext);
+  const { updateAddress, shippingAddress } = useContext(CartContext);
   const { register, handleSubmit, formState: { errors } } = useForm<ShippingAddress>({
     defaultValues: getAddressFromCookies(),
   });
@@ -171,7 +171,8 @@ const AddressPage = () => {
                 select
                 variant="filled"
                 label="Country"
-                defaultValue={countries[4].code}
+                key={shippingAddress?.country ?? countries[4].code}
+                defaultValue={ shippingAddress?.country ?? countries[4].code}
                 {
                   ...register('country', {
                     required: 'Field is required!',
