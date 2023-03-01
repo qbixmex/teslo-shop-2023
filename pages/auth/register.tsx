@@ -65,8 +65,9 @@ const RegisterPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                label="Name" 
-                variant="filled" 
+                label="Name"
+                variant="filled"
+                autoComplete='off'
                 fullWidth
                 {
                   ...register('name', {
@@ -86,6 +87,7 @@ const RegisterPage = () => {
                 type="email"
                 label="Email"
                 variant="filled"
+                autoComplete='off'
                 fullWidth
                 {
                   ...register('email', {
@@ -102,6 +104,7 @@ const RegisterPage = () => {
                 label="Password"
                 type="password"
                 variant="filled"
+                autoComplete='off'
                 fullWidth
                 {
                   ...register('password', {

@@ -63,7 +63,8 @@ const LoginPage = () => {
               <TextField 
                 type="email"
                 label="Email" 
-                variant="filled" 
+                variant="filled"
+                autoComplete='off'
                 fullWidth
                 {
                   ...register('email', {
@@ -79,7 +80,8 @@ const LoginPage = () => {
               <TextField 
                 label="Password" 
                 type="password" 
-                variant="filled" 
+                variant="filled"
+                autoComplete='off'
                 fullWidth
                 {
                   ...register('password', {
