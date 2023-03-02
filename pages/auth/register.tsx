@@ -1,11 +1,18 @@
 import { useState, useContext } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+
+import {
+  Box, Button, Chip, Grid,
+  Link, TextField, Typography
+} from '@mui/material';
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
-import { AuthLayout } from '../../components';
+
 import styles from './login_register.module.css';
+import { AuthLayout } from '../../components';
 import { AuthContext } from '../../context';
 import { validations } from '../../utils';
 
@@ -34,8 +41,7 @@ const RegisterPage = () => {
       return;
     }
 
-    const destination = router.query.page?.toString() || '/'; 
-    router.replace(destination);
+    await signIn('credentials', { email, password });
   };
 
   return (
@@ -54,7 +60,7 @@ const RegisterPage = () => {
             }}
           >
             <Chip
-              label={`User is already taken!`}
+              label={errorMessage}
               color="error"
               icon={ <ErrorIcon /> }
               sx={{ mb: 3 }}
@@ -148,6 +154,25 @@ const RegisterPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+  const session = await getSession({ req });
+
+  const { page = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
 };
 
 export default RegisterPage;

@@ -3,13 +3,17 @@ import { GetServerSideProps } from 'next'
 import { signIn, getSession } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
-import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
-import { AuthLayout } from '../../components';
+
+import {
+  Box, Button, Chip, Grid,
+  Link, TextField, Typography
+} from '@mui/material';
+import ErrorIcon from '@mui/icons-material/ErrorOutline';
+
 import styles from './login_register.module.css';
+import { AuthLayout } from '../../components';
 import { validations } from '../../utils';
-import { AuthContext } from '../../context';
 
 type FormData = {
   email: string;
@@ -19,7 +23,7 @@ type FormData = {
 const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-  const [showError, setShowError] = useState(false);
+  const [ showError, setShowError ] = useState(false);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
@@ -42,7 +46,7 @@ const LoginPage = () => {
             }}
           >
             <Chip
-              label={`User not found check "email" or "password"`}
+              label={'Invalid Credentials'}
               color="error"
               icon={ <ErrorIcon /> }
               sx={{ mb: 3 }}
@@ -136,6 +140,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
   return {
     props: {}
   };
-}
+};
 
 export default LoginPage;
