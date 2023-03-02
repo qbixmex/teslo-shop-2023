@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
         email: {
           label: 'Email:',
           type: 'email',
-          //? If you want to put a placeholder to login form
+          //? If you want to put a placeholder to login
           //? placeholder: 'bart-simpson@springfield.com'
         },
         password: { label: 'Password:', type: 'password' },

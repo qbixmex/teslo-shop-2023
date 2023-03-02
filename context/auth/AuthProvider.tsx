@@ -1,10 +1,11 @@
 import {
   FC, ReactNode, useReducer, useEffect, useRef
 } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Cookie from 'js-cookie';
 import axios from 'axios';
+
 import { IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
 import tesloAPI from '../../api/tesloAPI';
@@ -22,15 +23,14 @@ const AUTH_INITIAL_STATE: AuthState = {
 type Auth = { token: string; user: IUser };
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const [ state, dispatch ] = useReducer(authReducer, AUTH_INITIAL_STATE);
   const { data, status } = useSession();
   const router = useRouter();
   const mount = useRef(false);
 
   useEffect(() => {
     if (mount.current === true && status === 'authenticated') {
-      // dispatch({ type: 'Auth - Login', payload: { user: data?.user as IUser } })
-      console.log({ data: data?.user });
+      dispatch({ type: 'Auth - Login', payload: { user: data?.user as IUser } });
     }
     return () => {
       mount.current = true;
@@ -50,10 +50,10 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const logoutUser = (): void => {
-    Cookie.remove('token');
     Cookie.remove('cart');
     Cookie.remove('address');
-    router.reload();
+    // Next SignOut
+    signOut();
   };
 
   const registerUser = async (

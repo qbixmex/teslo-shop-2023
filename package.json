@@ -1,6 +1,6 @@
 {
   "name": "teslo_shop",
-  "version": "7.5.0",
+  "version": "7.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
