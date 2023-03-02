@@ -29,7 +29,7 @@ export const Navbar = () => {
   return (
     <AppBar>
       <Toolbar>
-        <NextLink href='/' passHref>
+        <NextLink href='/' passHref legacyBehavior>
           <Link display='flex' alignItems='center'>
             <Typography variant='h6' component='span'>
               Teslo |
@@ -50,21 +50,21 @@ export const Navbar = () => {
               : { xs: 'none', sm: 'block' }
           }}
         >
-          <NextLink href='/category/men' passHref>
+          <NextLink href='/category/men' passHref legacyBehavior>
             <Link>
               <Button
                 color={(route === '/category/men') ? 'primary' : 'info'}
               >Men</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/women' passHref>
+          <NextLink href='/category/women' passHref legacyBehavior>
             <Link>
               <Button
                 color={(route === '/category/women') ? 'primary' : 'info'}
               >Women</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/kids' passHref>
+          <NextLink href='/category/kids' passHref legacyBehavior>
             <Link>
               <Button
                 color={(route === '/category/kids') ? 'primary' : 'info'}
@@ -113,7 +113,7 @@ export const Navbar = () => {
           <SearchIcon />
         </IconButton>
 
-        <NextLink href='/cart' passHref>
+        <NextLink href='/cart' passHref legacyBehavior>
           <Link>
             <IconButton>
               <Badge

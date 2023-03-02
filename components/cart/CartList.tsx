@@ -30,7 +30,7 @@ export const CartList = ({editable = false }: Props) => {
       {cart.map((product) => (
         <Grid container key={product._id + product.size } spacing={2} my={1}>
           <Grid item xs={3}>
-            <NextLink href={`/product/${product.slug}`} passHref>
+            <NextLink href={`/product/${product.slug}`} passHref legacyBehavior>
               <Link>
                 <CardActionArea>
                   <CardMedia

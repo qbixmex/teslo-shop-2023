@@ -3,7 +3,6 @@ import NextLink from 'next/link';
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
 
 import { CartContext } from '../../context/cart/CartContext';
-import { ShippingAddress } from '../../interfaces';
 import { CartList, OrderSummary } from '../../components';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import styles from './summary.module.css';
@@ -37,7 +36,7 @@ const SummaryPage = () => {
 
               <Box display="flex" justifyContent="space-between">
                 <Typography variant='subtitle1'>Delivery Address</Typography>
-                <NextLink href="/checkout/address" passHref>
+                <NextLink href="/checkout/address" passHref legacyBehavior>
                   <Link className={styles.link}>Edit</Link>
                 </NextLink>
               </Box>
@@ -52,7 +51,7 @@ const SummaryPage = () => {
               <Divider sx={{ my: 2 }} />
 
               <Box display="flex" justifyContent="flex-end">
-                <NextLink href="/cart" passHref>
+                <NextLink href="/cart" passHref legacyBehavior>
                   <Link className={styles.link}>Edit</Link>
                 </NextLink>
               </Box>

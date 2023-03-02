@@ -1,4 +1,6 @@
 import { useState, useContext } from 'react';
+import { GetServerSideProps } from 'next'
+import { signIn, getSession } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
@@ -16,27 +18,12 @@ type FormData = {
 
 const LoginPage = () => {
   const router = useRouter();
-  const { loginUser } = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-
-    const isValidLogin = await loginUser(email, password);
-
-    if (!isValidLogin) {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 3000);
-      return;
-    }
-    
-    const destination = router.query.page?.toString() || '/'; 
-    router.replace(destination);
-  };
-
-  const navigateTo = (url: string) => {
-    router.push(url);
+    await signIn('credentials', { email, password });
   };
 
   return (
@@ -120,6 +107,7 @@ const LoginPage = () => {
                     : '/auth/register'
                 }
                 passHref
+                legacyBehavior
               >
                 <Link>Create an account</Link>
               </NextLink>
@@ -130,5 +118,24 @@ const LoginPage = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+  const session = await getSession({ req });
+
+  const { page = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+}
 
 export default LoginPage;

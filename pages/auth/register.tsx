@@ -138,6 +138,7 @@ const RegisterPage = () => {
                     : '/auth/login'
                 }
                 passHref
+                legacyBehavior
               >
                 <Link>Do you already have an account ?</Link>
               </NextLink>

@@ -21,3 +21,38 @@ export const checkUserEmailPassword = async (
     role: user.role,
   };
 };
+
+/**
+ * Verify or Creates an OAuth User
+ */
+export const oAuthToDbUser = async (oAuthEmail: string, oAuthName: string) => {
+  await db.connect();
+  const user = await User.findOne({ email: oAuthEmail });
+
+  if (user) {
+    await db.disconnect();
+    return {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+  }
+
+  const newUser = new User({
+    name: oAuthName,
+    email: oAuthEmail,
+    password: '@',
+    role: 'client'
+  });
+
+  await newUser.save();
+  await db.disconnect();
+
+  return {
+    id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    role: newUser.role,
+  }
+};

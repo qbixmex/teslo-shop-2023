@@ -20,7 +20,11 @@ export const ProductCard: FC<Props> = ({ product }) => {
       onMouseLeave={ () => setIsHovered(false) }
     >
       <Card className='fadeIn'>
-        <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
+        <NextLink
+          href={`/product/${product.slug}`}
+          passHref prefetch={false}
+          legacyBehavior
+        >
           <Link>
             <CardActionArea>
               {

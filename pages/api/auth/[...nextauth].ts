@@ -33,6 +33,14 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
     }),
   ],
+  
+  // Custom Pages
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register'
+  },
+
+  // Callbacks
 
   jwt: {
     // secret: process.env.JWT_SECRET_SEED, // @deprecated
@@ -44,7 +52,7 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token;
         switch (account.type) {
           case 'oauth':
-            // TODO: Create user or check if exists in database
+            token.user = await dbUsers.oAuthToDbUser(user?.email ?? '', user?.name ?? '');
             break;
           case 'credentials':
             token.user = user;

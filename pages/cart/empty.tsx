@@ -30,7 +30,7 @@ const EmptyCartPage = () => {
           >
             Shopping Cart Empty
           </Typography>
-          <NextLink href='/' passHref>
+          <NextLink href='/' passHref legacyBehavior>
             <Link
               typography='p'
               fontSize={28}
