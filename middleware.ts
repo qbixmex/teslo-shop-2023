@@ -8,19 +8,16 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET
   });
 
-  //? User Information
-  //? console.log({ session });
-
   if (!session) {
     const requestedPage = request.nextUrl.pathname;
     const url = request.nextUrl.clone();
-    url.pathname = `/auth/login`;
+    url.pathname = '/auth/login';
     url.search = `page=${requestedPage}`;
     return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
-};
+}
 
 export const config = {
   matcher: [
