@@ -1,21 +1,25 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import * as jose from 'jose';
+import { getToken } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('token') ?? '';
-  try {
-    await jose.jwtVerify(
-      token,
-      new TextEncoder().encode(process.env.JWT_SECRET_SEED ?? '')
-    );
-    return NextResponse.next();
-  } catch (error) {
-    const { protocol, host, pathname } = request.nextUrl;
-    return NextResponse.redirect(
-      `${protocol}//${host}/auth/login?page=${pathname}`
-    );
+  const session = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET
+  });
+
+  //? User Information
+  //? console.log({ session });
+
+  if (!session) {
+    const requestedPage = request.nextUrl.pathname;
+    const url = request.nextUrl.clone();
+    url.pathname = `/auth/login`;
+    url.search = `page=${requestedPage}`;
+    return NextResponse.redirect(url);
   }
+
+  return NextResponse.next();
 };
 
 export const config = {

@@ -1,9 +1,9 @@
-import NextAuth, { Awaitable, RequestInternal, User } from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: 'Custom Login',
@@ -16,10 +16,12 @@ export const authOptions = {
         password: { label: 'Password:', type: 'password' },
       },
       async authorize(credentials) {
+
         console.log({credentials});
 
         // TODO: Validate against database
         return {
+          id: 'abc123',
           name: 'Bart Simpson',
           email: 'bart-simpson@springfield.com',
           role: 'admin',
@@ -40,9 +42,28 @@ export const authOptions = {
     // secret: process.env.JWT_SECRET_SEED, // @deprecated
   },
 
-  // Callbacks
   callbacks: {
-    // TODO: Make some callbacks ...
+    async jwt({ token, account, user }) {
+      if ( account ) {
+        token.accessToken = account.access_token;
+        switch (account.type) {
+          case 'oauth':
+            // TODO: Create user or check if exists in database
+            break;
+          case 'credentials':
+            token.user = user;
+            break;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken as any;
+      session.user = token.user as any;
+      return session;
+    }
   },
 };
 
