@@ -1,4 +1,7 @@
-import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
+import {
+  FC, ReactNode, useReducer, useEffect, useRef
+} from 'react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Cookie from 'js-cookie';
 import axios from 'axios';
@@ -20,11 +23,23 @@ type Auth = { token: string; user: IUser };
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const { data, status } = useSession();
   const router = useRouter();
+  const mount = useRef(false);
+
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
   useEffect(() => {
-    checkToken();
-  }, []);
+    if (mount.current === true && status === 'authenticated') {
+      // dispatch({ type: 'Auth - Login', payload: { user: data?.user as IUser } })
+      console.log({ data: data?.user });
+    }
+    return () => {
+      mount.current = true;
+    };
+  }, [ status, data ]);
   
   const checkToken = async () => {
     if (!Cookie.get('token')) return;
