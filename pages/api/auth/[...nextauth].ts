@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
+import { dbUsers } from '../../../database';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,21 +12,16 @@ export const authOptions: NextAuthOptions = {
         email: {
           label: 'Email:',
           type: 'email',
-          placeholder: 'bart-simpson@springfield.com'
+          //? If you want to put a placeholder to login form
+          //? placeholder: 'bart-simpson@springfield.com'
         },
         password: { label: 'Password:', type: 'password' },
       },
-      async authorize(credentials) {
-
-        console.log({credentials});
-
-        // TODO: Validate against database
-        return {
-          id: 'abc123',
-          name: 'Bart Simpson',
-          email: 'bart-simpson@springfield.com',
-          role: 'admin',
-        };
+      async authorize(credentials, request) {
+        return await dbUsers.checkUserEmailPassword(
+          credentials!.email,
+          credentials!.password
+        );
       }
     }),
     GithubProvider({

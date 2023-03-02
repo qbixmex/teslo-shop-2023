@@ -27,10 +27,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter();
   const mount = useRef(false);
 
-  // useEffect(() => {
-  //   checkToken();
-  // }, []);
-
   useEffect(() => {
     if (mount.current === true && status === 'authenticated') {
       // dispatch({ type: 'Auth - Login', payload: { user: data?.user as IUser } })
@@ -41,18 +37,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     };
   }, [ status, data ]);
   
-  const checkToken = async () => {
-    if (!Cookie.get('token')) return;
-    try {
-      const { data } = await tesloAPI.get<Auth>('/users/validate-token');
-      const { token, user } = data;
-      Cookie.set('token', token);
-      dispatch({ type: 'Auth - Login', payload: { user }});
-    } catch (error) {
-      Cookie.remove('token');
-    }
-  };
-
   const loginUser = async (email: string, password: string): Promise<boolean> => {
     try {
       const { data } = await tesloAPI.post<Auth>('/users/login', { email, password });
