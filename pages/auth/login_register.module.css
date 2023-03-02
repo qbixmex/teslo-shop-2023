@@ -17,6 +17,20 @@
   color: var(--blue);
 }
 
+.social-accounts {
+  display: flex;
+  flex-direction: column;
+}
+
+.social-accounts-divider {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.social-accounts-button {
+  margin-bottom: 1rem;
+}
+
 .register-link:hover {
   text-decoration: underline;
 }
