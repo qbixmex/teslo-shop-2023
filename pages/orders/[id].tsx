@@ -53,7 +53,7 @@ const OrderPage = () => {
 
               <Box display="flex" justifyContent="space-between">
                 <Typography variant="subtitle1">Delivery Address</Typography>
-                <NextLink href="/checkout/address" passHref>
+                <NextLink href="/checkout/address" passHref legacyBehavior>
                   <Link className={styles.link}>Edit</Link>
                 </NextLink>
               </Box>
@@ -67,7 +67,7 @@ const OrderPage = () => {
               <Divider sx={{ my: 2 }} />
 
               <Box display="flex" justifyContent="flex-end">
-                <NextLink href="/cart" passHref>
+                <NextLink href="/cart" passHref legacyBehavior>
                   <Link className={styles.link}>Edit</Link>
                 </NextLink>
               </Box>

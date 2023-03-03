@@ -4,7 +4,6 @@ import { getSession } from 'next-auth/react';
 import { db } from '../../../database';
 import { Order, Product } from '../../../models';
 import { IOrder } from '../../../interfaces';
-import mongoose from 'mongoose';
 
 type Data = { message: string; } | IOrder;
 
@@ -39,7 +38,7 @@ const createRouteLoader = async (
   const productsIds = orderItems.map(product => product._id);
 
   await db.connect();
-  const dbProducts = await Product.find({ _id: { $in: productsIds} });
+  const dbProducts = await Product.find({ _id: { $in: productsIds } });
 
   try {
     const subTotal = orderItems.reduce((prevSubTotal, currentProduct) => {
@@ -55,7 +54,6 @@ const createRouteLoader = async (
     
     const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE ?? 0);
 
-    
     const backendTotal = subTotal * ( taxRate + 1 );
 
     if (total !== backendTotal) {
@@ -71,8 +69,9 @@ const createRouteLoader = async (
       isPaid: false,
     });
 
-    // Save Order to database
+    //* Save Order to database
     await newOrder.save();
+    await db.disconnect();
 
     return response.status(201).json(newOrder);
 

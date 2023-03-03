@@ -27,7 +27,7 @@ const columns: GridColDef[] = [
     description: 'Show information if order was placed',
     width: 120,
     renderCell: (params) => (
-      <NextLink href={`/orders/${params.row.id}`} passHref>
+      <NextLink href={`/orders/${params.row.id}`} passHref legacyBehavior>
         <Link className={styles.link}>
           Show Order
         </Link>

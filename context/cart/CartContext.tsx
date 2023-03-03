@@ -16,7 +16,11 @@ type ContextProps = {
   removeCartProduct: (product: ICartProduct) => void;
   updateAddress: (address: ShippingAddress) => void;
   // Orders
-  createOrder: () => Promise<void>;
+  createOrder: () => Promise<{
+    hasError: boolean;
+    orderId?: string;
+    message?: string;
+  }>;
 };
 
 export const CartContext = createContext({} as ContextProps);

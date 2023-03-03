@@ -9,6 +9,7 @@ import {
   ShippingAddress,
 } from '../../interfaces';
 import tesloAPI from '../../api/tesloAPI';
+import axios from 'axios';
 
 export type CartState = {
   isLoaded: boolean;
@@ -147,7 +148,11 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{
+    hasError: boolean;
+    orderId?: string;
+    message?: string;
+  }> => {
     if ( !state.shippingAddress ) {
       throw new Error(`There's no shipping address!`);
     }
@@ -166,10 +171,24 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       const { data } = await tesloAPI.post<IOrder>('/orders', body);
 
-      console.log(data);
+      // TODO: Dispatch
+
+      return {
+        hasError: false,
+        orderId: data._id
+      };
 
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        return {
+          hasError: true,
+          message: error.response?.data.message,
+        };
+      }
+      return {
+        hasError: true,
+        message: 'Unknown Error, trace backend error logs!',
+      };
     }
   };
 
