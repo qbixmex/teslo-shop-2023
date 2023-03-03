@@ -1,7 +1,13 @@
 import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { CartContext, cartReducer } from './';
-import { ICartProduct, ICartSummary, ShippingAddress } from '../../interfaces';
+import {
+  ICartProduct,
+  ICartSummary,
+  IOrder,
+  IOrderItem,
+  ShippingAddress,
+} from '../../interfaces';
 import tesloAPI from '../../api/tesloAPI';
 
 export type CartState = {
@@ -142,11 +148,25 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const createOrder = async () => {
+    if ( !state.shippingAddress ) {
+      throw new Error(`There's no shipping address!`);
+    }
+
+    const body: IOrder = {
+      orderItems: state.cart.map(p => ({ ...p, size: p.size! })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.cartSummary.numberOfItems,
+      subtotal: state.cartSummary.subtotal,
+      tax: state.cartSummary.tax,
+      total: state.cartSummary.total,
+      isPaid: false,
+    };
+
     try {
 
-      const { data } = await tesloAPI.post<{ message: string }>('/orders');
+      const { data } = await tesloAPI.post<IOrder>('/orders', body);
 
-      console.log({ message: data.message });
+      console.log(data);
 
     } catch (error) {
       console.log(error);

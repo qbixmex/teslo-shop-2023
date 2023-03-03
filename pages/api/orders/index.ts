@@ -21,7 +21,8 @@ const createRouteLoader = (
   request: NextApiRequest,
   response: NextApiResponse<Data>
 ) => {
-  return response.status(201).json({ message: 'Order ABC-123' });
+  const body = request.body;
+  return response.status(201).json(body);
 }
 
 export default handler;
