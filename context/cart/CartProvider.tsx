@@ -2,6 +2,7 @@ import { FC, ReactNode, useReducer, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { CartContext, cartReducer } from './';
 import { ICartProduct, ICartSummary, ShippingAddress } from '../../interfaces';
+import tesloAPI from '../../api/tesloAPI';
 
 export type CartState = {
   isLoaded: boolean;
@@ -140,15 +141,31 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
+  const createOrder = async () => {
+    try {
+
+      const { data } = await tesloAPI.post<{ message: string }>('/orders');
+
+      console.log({ message: data.message });
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const contextProps = {
+    ...state,
+    // Methods
+    addProductToCart,
+    updateCartQuantity,
+    removeCartProduct,
+    updateAddress,
+    // Orders
+    createOrder,
+  };
+
   return (
-    <CartContext.Provider value={{
-      ...state,
-      // Methods
-      addProductToCart,
-      updateCartQuantity,
-      removeCartProduct,
-      updateAddress,
-    }}>
+    <CartContext.Provider value={contextProps}>
       { children }
     </CartContext.Provider>
   );

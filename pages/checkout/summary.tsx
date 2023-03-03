@@ -12,13 +12,21 @@ import { countries } from '../../utils';
 
 const SummaryPage = () => {
   const router = useRouter();
-  const { shippingAddress: address, cartSummary: { numberOfItems } } = useContext(CartContext);
+  const {
+    shippingAddress: address,
+    cartSummary: { numberOfItems },
+    createOrder,
+  } = useContext(CartContext);
 
   useEffect(() => {
     if (!Cookies.get('address')) {
       router.push('/checkout/address');
     }
   }, [ router ]);
+
+  const onCreateOrder = () => {
+    createOrder();
+  };
 
   if (!address) {
     return <></>;
@@ -72,6 +80,7 @@ const SummaryPage = () => {
                   className="circular-btn"
                   color="secondary"
                   fullWidth
+                  onClick={ onCreateOrder }
                 >Confirm</Button>
               </Box>
             </CardContent>
