@@ -29,7 +29,8 @@ type CartActionType =
   | {
     type: 'Cart - Update Shipping Address',
     payload: { shippingAddress: ShippingAddress },
-  };
+  }
+  | { type: 'Cart - Order Complete' };
 
 export const cartReducer = (state: CartState, action: CartActionType): CartState => {
   switch(action.type) {
@@ -76,6 +77,17 @@ export const cartReducer = (state: CartState, action: CartActionType): CartState
       return {
         ...state,
         shippingAddress: action.payload.shippingAddress
+      };
+    case 'Cart - Order Complete':
+      return {
+        ...state,
+        cart: [],
+        cartSummary: {
+          numberOfItems: 0,
+          subtotal: 0,
+          tax: 0,
+          total: 0,
+        },
       };
     default:
       return state;

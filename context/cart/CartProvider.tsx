@@ -5,7 +5,6 @@ import {
   ICartProduct,
   ICartSummary,
   IOrder,
-  IOrderItem,
   ShippingAddress,
 } from '../../interfaces';
 import tesloAPI from '../../api/tesloAPI';
@@ -171,7 +170,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       const { data } = await tesloAPI.post<IOrder>('/orders', body);
 
-      // TODO: Dispatch
+      dispatch({ type: 'Cart - Order Complete' });
 
       return {
         hasError: false,
