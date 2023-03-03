@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box, Button, FormControl, Grid,
@@ -23,19 +23,23 @@ const initialData: ShippingAddress = {
   phone: '',
 };
 
-const getAddressFromCookies = (): ShippingAddress => {
+const getAddressFromCookies = (data: ShippingAddress): ShippingAddress => {
   if (Cookies.get('address')) {
     return JSON.parse(Cookies.get('address')!);
   }
-  return initialData;
+  return data;
 };
 
 const AddressPage = () => {
   const router = useRouter();
   const { updateAddress, shippingAddress } = useContext(CartContext);
-  const { register, handleSubmit, formState: { errors } } = useForm<ShippingAddress>({
-    defaultValues: getAddressFromCookies(),
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ShippingAddress>({
+    defaultValues: getAddressFromCookies(initialData),
   });
+
+  useEffect(() => {
+    reset(getAddressFromCookies(initialData));
+  }, [reset]);
 
   const onSubmitAddress = (data: ShippingAddress) => {
     updateAddress(data);
@@ -179,7 +183,6 @@ const AddressPage = () => {
                   })
                 }
                 error={ !!errors.country }
-                // helperText={ errors.city?.message }
               >
                 {
                   countries.map(country => (
