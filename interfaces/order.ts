@@ -35,3 +35,10 @@ export interface ShippingAddress {
   country: string;
   phone: string;
 }
+
+export interface ISummary {
+  numberOfItems: number;
+  subtotal: number;
+  tax: number;
+  total: number;
+}

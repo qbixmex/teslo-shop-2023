@@ -6,14 +6,15 @@ import {
 } from '@mui/material';
 import { CartContext } from '../../context';
 import { ItemCounter } from "../ui";
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 import { currency } from '../../utils';
 
 type Props = {
   editable?: boolean;
+  products?: IOrderItem[],
 };
 
-export const CartList = ({editable = false }: Props) => {
+export const CartList = ({editable = false, products }: Props) => {
   const {
     cart,
     updateCartQuantity,
@@ -25,9 +26,11 @@ export const CartList = ({editable = false }: Props) => {
     updateCartQuantity(product);
   };
 
+  const productsToShow = products ? products : cart;
+
   return (
     <>
-      {cart.map((product) => (
+      {productsToShow.map((product) => (
         <Grid container key={product._id + product.size } spacing={2} my={1}>
           <Grid item xs={3}>
             <NextLink href={`/product/${product.slug}`} passHref legacyBehavior>
@@ -57,7 +60,7 @@ export const CartList = ({editable = false }: Props) => {
                       <ItemCounter
                         currentValue={product.quantity}
                         maxValue={10}
-                        updateQuantity={ (newValue) => onNewCartQuantityValue(product, newValue) }
+                        updateQuantity={ (newValue) => onNewCartQuantityValue(product as ICartProduct, newValue) }
                       />
                     )
                   : (
@@ -85,7 +88,7 @@ export const CartList = ({editable = false }: Props) => {
                   variant="outlined"
                   color="error"
                   sx={{ mt: 1 }}
-                  onClick={ () => removeCartProduct(product) }
+                  onClick={ () => removeCartProduct(product as ICartProduct) }
                 >
                   remove
                 </Button>

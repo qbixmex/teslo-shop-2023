@@ -1,40 +1,34 @@
-import { useEffect, useRef } from 'react';
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
-import NextLink from 'next/link';
 
 import {
   Box, Card, CardContent, Chip,
-  Divider, Grid, Link, Typography
+  Divider, Grid, Typography
 } from '@mui/material';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import CreditScoreIcon from '@mui/icons-material/CreditScoreOutlined';
 
 import { dbOrders } from '../../database';
-import { IOrder } from '../../interfaces';
+import { IOrder, ISummary } from '../../interfaces';
 import { ShopLayout, CartList, OrderSummary } from '../../components';
 import styles from './order.module.css';
 
-type Props = {
-  order: IOrder;
-};
+type Props = { order: IOrder };
 
 const OrderPage: NextPage<Props> = ({ order }) => {
 
-  const mount = useRef(true);
+  const { orderItems, shippingAddress } = order;
 
-  useEffect(() => {
-    if (mount.current) {
-      console.log({ order });
-    }
-    return () => {
-      mount.current = false;
-    }
-  }, [ order ]);
+  const summary: ISummary = {
+    numberOfItems: order.numberOfItems,
+    subtotal: order.subtotal,
+    tax: order.tax,
+    total: order.total,
+  };
 
   return (
     <ShopLayout
-      title="Teslo Shop - Order 123456789 Resume"
+      title="Teslo Shop - Order Resume"
       pageDescription="Order resume"
       robots="noindex, nofollow"
     >
@@ -42,17 +36,9 @@ const OrderPage: NextPage<Props> = ({ order }) => {
         variant="h1"
         component="h1"
         className={styles.title}
-      >Order: 123456789</Typography>
+      >Order: { order._id }</Typography>
 
-      { false ? (
-          <Chip
-            sx={{ my: 2 }}
-            label="Payment Pending"
-            variant="outlined"
-            color="error"
-            icon={<CreditCardIcon />}
-          />
-        ) : (
+      { order.isPaid ? (
           <Chip
             sx={{ my: 2 }}
             label="Already Paid"
@@ -60,52 +46,67 @@ const OrderPage: NextPage<Props> = ({ order }) => {
             color="success"
             icon={<CreditScoreIcon />}
           />
+        ) : (
+          <Chip
+            sx={{ my: 2 }}
+            label="Payment Pending"
+            variant="outlined"
+            color="error"
+            icon={<CreditCardIcon />}
+          />
         )
       }
 
       <Grid container>
         <Grid item xs={12} sm={7} mb={2}>
-          <CartList />
+          <CartList products={orderItems} />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">
             <CardContent>
-              <Typography variant="h2">Resume (3 items)</Typography>
+              <Typography variant="h2">
+                Resume&nbsp;
+                ({order.numberOfItems} product{order.numberOfItems > 0 ? 's' : '' })
+              </Typography>
 
               <Divider sx={{ my: 1 }} />
 
               <Box display="flex" justifyContent="space-between">
                 <Typography variant="subtitle1">Delivery Address</Typography>
-                <NextLink href="/checkout/address" passHref legacyBehavior>
-                  <Link className={styles.link}>Edit</Link>
-                </NextLink>
               </Box>
 
-              <Typography>Bart Simpson</Typography>
-              <Typography>742 Evergreen Terrace</Typography>
-              <Typography>Springfield, 02360</Typography>
-              <Typography>USA</Typography>
-              <Typography>+1 1234567</Typography>
+              <Typography>
+                { shippingAddress.firstName } { shippingAddress.lastName }
+              </Typography>
+              <Typography>
+                { shippingAddress.address }
+                { shippingAddress.address2 ? `, ${shippingAddress.address2}` : '' }
+              </Typography>
+              <Typography>
+                { shippingAddress.city }, { shippingAddress.zip }
+              </Typography>
+              <Typography>{ shippingAddress.country }</Typography>
+              <Typography>{ shippingAddress.phone }</Typography>
 
               <Divider sx={{ my: 2 }} />
 
-              <Box display="flex" justifyContent="flex-end">
-                <NextLink href="/cart" passHref legacyBehavior>
-                  <Link className={styles.link}>Edit</Link>
-                </NextLink>
-              </Box>
+              <OrderSummary summary={ summary } />
 
-              <OrderSummary />
-
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='h1' component='p'>Pay</Typography>
-                <Chip
-                  sx={{ my: 2 }}
-                  label="Already Paid"
-                  variant="outlined"
-                  color="success"
-                  icon={<CreditScoreIcon />}
-                />
+                {
+                  order.isPaid ? (
+                    <Chip
+                      sx={{ my: 2 }}
+                      label="Already Paid"
+                      variant="outlined"
+                      color="success"
+                      icon={<CreditScoreIcon />}
+                    />
+                  ) : (
+                    <Typography variant='h2' mt={2}>(Paypal Logo)</Typography>
+                  )
+                }
               </Box>
             </CardContent>
           </Card>
