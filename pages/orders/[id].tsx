@@ -1,14 +1,37 @@
+import { useEffect, useRef } from 'react';
+import { GetServerSideProps, NextPage } from 'next'
+import { getSession } from 'next-auth/react';
 import NextLink from 'next/link';
+
 import {
   Box, Card, CardContent, Chip,
   Divider, Grid, Link, Typography
 } from '@mui/material';
-import { ShopLayout, CartList, OrderSummary } from '../../components';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import CreditScoreIcon from '@mui/icons-material/CreditScoreOutlined';
+
+import { dbOrders } from '../../database';
+import { IOrder } from '../../interfaces';
+import { ShopLayout, CartList, OrderSummary } from '../../components';
 import styles from './order.module.css';
 
-const OrderPage = () => {
+type Props = {
+  order: IOrder;
+};
+
+const OrderPage: NextPage<Props> = ({ order }) => {
+
+  const mount = useRef(true);
+
+  useEffect(() => {
+    if (mount.current) {
+      console.log({ order });
+    }
+    return () => {
+      mount.current = false;
+    }
+  }, [ order ]);
+
   return (
     <ShopLayout
       title="Teslo Shop - Order 123456789 Resume"
@@ -90,6 +113,38 @@ const OrderPage = () => {
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  const { id = '' } = context.query;
+  const session: any = await getSession({ req: context.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/auth/login?page=/orders/${ id }`,
+        permanent: false,
+      }
+    };
+  }
+
+  const order = await dbOrders.getOrderById(id.toString());
+
+  if ( !order || ( order!.user !== session.user.id ) ) {
+    return {
+      redirect: {
+        destination: `/orders/history`,
+        permanent: false,
+      }
+    };
+  }
+
+  return {
+    props: {
+      order
+    }
+  };
 };
 
 export default OrderPage;
