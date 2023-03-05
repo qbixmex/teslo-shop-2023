@@ -39,4 +39,5 @@ next-env.d.ts
 mongo/
 
 # Environment Variables
-.env
+.env.development
+.env.production
