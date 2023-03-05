@@ -6,9 +6,9 @@ import { lightTheme } from '../themes';
 import { SWRConfig } from 'swr';
 import { CartProvider, UIProvider, AuthProvider } from '../context';
 
-const MyApp = ({ Component, pageProps }: AppProps) =>  {
+const MyApp = ({ Component, pageProps : { session, ...pageProps } }: AppProps) =>  {
   return (
-    <SessionProvider>    
+    <SessionProvider session={session}>
       <SWRConfig value={{
         fetcher: async (resource, init) => {
           const response = await fetch(resource, init);
