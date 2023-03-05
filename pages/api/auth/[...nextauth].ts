@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { dbUsers } from '../../../database';
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: 'Custom Login',
@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token, user }) {
-      session.accessToken = token.accessToken as any;
+      session.accessToken = token.accessToken as string;
       session.user = token.user as any;
       return session;
     }
