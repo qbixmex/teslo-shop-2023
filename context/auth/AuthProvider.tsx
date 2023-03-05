@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import { IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
-import tesloAPI from '../../api/tesloAPI';
+import tesloAPI from '../../services/tesloAPI';
 
 export type AuthState = {
   isLoggedIn: boolean;

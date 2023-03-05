@@ -7,7 +7,7 @@ import {
   IOrder,
   ShippingAddress,
 } from '../../interfaces';
-import tesloAPI from '../../api/tesloAPI';
+import tesloAPI from '../../services/tesloAPI';
 import axios from 'axios';
 
 export type CartState = {
