@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next'
 import { signIn, getSession, getProviders } from 'next-auth/react';
 import NextLink from 'next/link';
@@ -22,21 +22,15 @@ type FormData = {
 
 const LoginPage = () => {
   const router = useRouter();
-  const mount = useRef(false);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [ showError, setShowError ] = useState(false);
   const [ providers, setProviders ] = useState<any>({});
 
   useEffect(() => {
-    if (mount.current === true) {
-      getProviders().then(provider => {
-        setProviders(provider);
-      });
-    }
-    return () => {
-      mount.current = true;
-    };
-  }, [ mount ]);
+    getProviders().then(provider => {
+      setProviders(provider);
+    });
+  }, []);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
