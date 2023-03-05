@@ -11,7 +11,6 @@ import {
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 import { useForm } from 'react-hook-form';
 
-import styles from './login_register.module.css';
 import { AuthLayout } from '../../components';
 import { AuthContext } from '../../context';
 import { validations } from '../../utils';
@@ -50,8 +49,17 @@ const RegisterPage = () => {
       pageDescription="Login with your credentials"
     >
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
-        <Box className={styles.box}>
-          <Typography component="h1" className={styles.title}>Register Account</Typography>
+        <Box sx={{ width: '380px', padding: '10px 20px' }}>
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: '2.4rem',
+              textAlign: 'center',
+              fontWeight: '300',
+              color: 'var(--gray)',
+              marginBottom: '1rem',
+            }}
+          >Register Account</Typography>
 
           <Box
             sx={{
@@ -136,7 +144,10 @@ const RegisterPage = () => {
                 Register
               </Button>
             </Grid>
-            <Grid item xs={12} className={styles['register-link']}>
+            <Grid item xs={12}sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',              
+            }}>
               <NextLink
                 href={
                   router.query.page
@@ -144,9 +155,14 @@ const RegisterPage = () => {
                     : '/auth/login'
                 }
                 passHref
-                legacyBehavior
+                legacyBehavior                
               >
-                <Link>Do you already have an account ?</Link>
+                <Link
+                  sx={{
+                    color: 'var(--blue)',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >Do you already have an account ?</Link>
               </NextLink>
             </Grid>
           </Grid>

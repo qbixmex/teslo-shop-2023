@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 
-import styles from './login_register.module.css';
 import { AuthLayout } from '../../components';
 import { validations } from '../../utils';
 
@@ -43,8 +42,17 @@ const LoginPage = () => {
       pageDescription="Login with your credentials"
     >
       <form onSubmit={ handleSubmit(onLoginUser) } noValidate>
-        <Box className={styles.box}>
-          <Typography component="h1" className={styles.title}>Login Session</Typography>
+        <Box sx={{ width: '380px', padding: '10px 20px' }}>
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: '2.4rem',
+              textAlign: 'center',
+              fontWeight: '300',
+              color: 'var(--gray)',
+              marginBottom: '1rem',
+            }}
+          >Login Session</Typography>
 
           <Box
             sx={{
@@ -110,7 +118,10 @@ const LoginPage = () => {
                 Login
               </Button>
             </Grid>
-            <Grid item xs={12} className={styles['register-link']}>
+            <Grid item xs={12} sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',              
+            }}>
               <NextLink
                 href={
                   router.query.page
@@ -120,19 +131,30 @@ const LoginPage = () => {
                 passHref
                 legacyBehavior
               >
-                <Link>Create an account</Link>
+                <Link
+                  sx={{
+                    color: 'var(--blue)',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >Create an account</Link>
               </NextLink>
             </Grid>
 
-            <Grid item xs={12} className={styles['social-accounts']}>
-              <Divider className={styles['social-accounts-divider']} />
+            <Grid item xs={12} sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+              <Divider sx={{
+                width: '100%',
+                marginBottom: '1rem',
+              }} />
               {
                 Object.values(providers).map((provider: any) => {
                   if (provider.id !== 'credentials') {
                     return (
                       <Button
                         key={provider.id}
-                        className={ styles['social-accounts-button'] }
+                        sx={{ mb: 1 }}
                         variant="outlined"
                         color="primary"
                         fullWidth
