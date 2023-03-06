@@ -41,7 +41,7 @@ export const OrderSummary = ({ summary }: Props) => {
         </Typography>
       </Grid>
       <Grid item xs={6} mt={2}>
-        <Typography>Total</Typography>
+        <Typography sx={{ fontWeight: 'bold' }}>Total</Typography>
       </Grid>
       <Grid item xs={6} className={styles['row-alignment']} mt={2}>
         <Typography className={styles.total}>

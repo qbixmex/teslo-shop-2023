@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 
 import {
   Box, Card, CardContent, Chip,
@@ -32,30 +33,27 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       pageDescription="Order resume"
       robots="noindex, nofollow"
     >
-      <Typography
-        variant="h1"
-        component="h1"
-        className={styles.title}
-      >Order: { order._id }</Typography>
+      <Typography variant="h1" component="h1" className={styles.title}>
+        Order: {order._id}
+      </Typography>
 
-      { order.isPaid ? (
-          <Chip
-            sx={{ my: 2 }}
-            label="Already Paid"
-            variant="outlined"
-            color="success"
-            icon={<CreditScoreIcon />}
-          />
-        ) : (
-          <Chip
-            sx={{ my: 2 }}
-            label="Payment Pending"
-            variant="outlined"
-            color="error"
-            icon={<CreditCardIcon />}
-          />
-        )
-      }
+      {order.isPaid ? (
+        <Chip
+          sx={{ my: 2 }}
+          label="Already Paid"
+          variant="outlined"
+          color="success"
+          icon={<CreditScoreIcon />}
+        />
+      ) : (
+        <Chip
+          sx={{ my: 2 }}
+          label="Payment Pending"
+          variant="outlined"
+          color="error"
+          icon={<CreditCardIcon />}
+        />
+      )}
 
       <Grid container className="fadeIn">
         <Grid item xs={12} sm={7} mb={2}>
@@ -65,8 +63,8 @@ const OrderPage: NextPage<Props> = ({ order }) => {
           <Card className="summary-card">
             <CardContent>
               <Typography variant="h2">
-                Resume&nbsp;
-                ({order.numberOfItems} product{order.numberOfItems > 0 ? 's' : '' })
+                Resume&nbsp; ({order.numberOfItems} product
+                {order.numberOfItems > 0 ? "s" : ""})
               </Typography>
 
               <Divider sx={{ my: 1 }} />
@@ -76,37 +74,55 @@ const OrderPage: NextPage<Props> = ({ order }) => {
               </Box>
 
               <Typography>
-                { shippingAddress.firstName } { shippingAddress.lastName }
+                {shippingAddress.firstName} {shippingAddress.lastName}
               </Typography>
               <Typography>
-                { shippingAddress.address }
-                { shippingAddress.address2 ? `, ${shippingAddress.address2}` : '' }
+                {shippingAddress.address}
+                {shippingAddress.address2
+                  ? `, ${shippingAddress.address2}`
+                  : ""}
               </Typography>
               <Typography>
-                { shippingAddress.city }, { shippingAddress.zip }
+                {shippingAddress.city}, {shippingAddress.zip}
               </Typography>
-              <Typography>{ shippingAddress.country }</Typography>
-              <Typography>{ shippingAddress.phone }</Typography>
+              <Typography>{shippingAddress.country}</Typography>
+              <Typography>{shippingAddress.phone}</Typography>
 
               <Divider sx={{ my: 2 }} />
 
-              <OrderSummary summary={ summary } />
+              <OrderSummary summary={summary} />
 
-              <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='h1' component='p'>Pay</Typography>
-                {
-                  order.isPaid ? (
-                    <Chip
-                      sx={{ my: 2 }}
-                      label="Already Paid"
-                      variant="outlined"
-                      color="success"
-                      icon={<CreditScoreIcon />}
-                    />
-                  ) : (
-                    <Typography variant='h2' mt={2}>(Paypal Logo)</Typography>
-                  )
-                }
+              <Box sx={{ mt: 3, display: "flex", flexDirection: "column" }}>
+                {order.isPaid ? (
+                  <Chip
+                    sx={{ my: 2 }}
+                    label="Already Paid"
+                    variant="outlined"
+                    color="success"
+                    icon={<CreditScoreIcon />}
+                  />
+                ) : (
+                  <PayPalButtons
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [
+                          {
+                            amount: {
+                              value: "1.55",
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                    onApprove={(data, actions) => {
+                      return actions.order!.capture().then((details) => {
+                        console.log(details);
+                        const name = details.payer.name?.given_name;
+                        alert(`Transaction completed by ${name}`);
+                      });
+                    }}
+                  />
+                )}
               </Box>
             </CardContent>
           </Card>
