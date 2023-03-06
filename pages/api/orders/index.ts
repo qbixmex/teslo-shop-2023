@@ -69,6 +69,9 @@ const createRouteLoader = async (
       isPaid: false,
     });
 
+    //* Round to 2 decimals
+    newOrder.total = Math.round(newOrder.total * 100) / 100;
+
     //* Save Order to database
     await newOrder.save();
     await db.disconnect();
