@@ -1,0 +1,16 @@
+.Card {
+  display: flex;
+}
+
+.CardContentIcon {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CardContentInfo {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
