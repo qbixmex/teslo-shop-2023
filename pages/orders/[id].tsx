@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import {
   Box, Card, CardContent, Chip,
+  CircularProgress,
   Divider, Grid, Typography
 } from '@mui/material';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
@@ -30,6 +32,7 @@ type OrderResponseBody = {
 const OrderPage: NextPage<Props> = ({ order }) => {
 
   const router = useRouter();
+  const [ isPaying, setIsPaying ] = useState(false);
 
   const { orderItems, shippingAddress } = order;
 
@@ -45,6 +48,8 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       return alert('No payment was made on Paypal');
     }
 
+    setIsPaying(true);
+
     try {
       await tesloAPI.post(`/orders/pay`, {
         transactionId: details.id,
@@ -52,6 +57,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       });
       router.reload();
     } catch (error) {
+      setIsPaying(false);
       console.log(error);
       alert(error);
     }
@@ -123,38 +129,48 @@ const OrderPage: NextPage<Props> = ({ order }) => {
               <OrderSummary summary={summary} />
 
               <Box sx={{ mt: 3, display: "flex", flexDirection: "column" }}>
-                {order.isPaid ? (
-                  <Chip
-                    sx={{ my: 2 }}
-                    label="Already Paid"
-                    variant="outlined"
-                    color="success"
-                    icon={<CreditScoreIcon />}
+                <Box display="flex" justifyContent="center" className="fadeIn">
+                  <CircularProgress
+                    color="secondary"
+                    size={50}
+                    thickness={5}
+                    sx={{ display: isPaying ? 'flex' : 'none' }}
                   />
-                ) : (
-                  <PayPalButtons
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        purchase_units: [
-                          {
-                            description: 'T-Shirt',
-                            amount: {
-                              currency_code: 'USD',
-                              value: String(order.total),
+                </Box>
+                <Box sx={{
+                  display: isPaying ? 'none' : 'flex',
+                  flex: 1,
+                  flexDirection: 'column',
+                }}>
+                  {order.isPaid ? (
+                    <Chip
+                      sx={{ my: 2 }}
+                      label="Already Paid"
+                      variant="outlined"
+                      color="success"
+                      icon={<CreditScoreIcon />}
+                    />
+                  ) : (
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                currency_code: 'USD',
+                                value: String(order.total),
+                              },
                             },
-                          },
-                        ],
-                        application_context: {
-                          shipping_preference: 'NO_SHIPPING'
-                        }
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      const details = await actions.order!.capture()
-                      onOrderCompleted(details);
-                    }}
-                  />
-                )}
+                          ],
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        const details = await actions.order!.capture()
+                        onOrderCompleted(details);
+                      }}
+                    />
+                  )}
+                </Box>
               </Box>
             </CardContent>
           </Card>
