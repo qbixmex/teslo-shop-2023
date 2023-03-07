@@ -1,4 +1,6 @@
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
+import useSWR from 'swr';
+import { Grid, Typography } from '@mui/material';
 import DashboardIcon from "@mui/icons-material/DashboardOutlined";
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoneyOutlined';
@@ -8,10 +10,45 @@ import ProductsIcon from '@mui/icons-material/CategoryOutlined';
 import OutStockIcon from '@mui/icons-material/CancelPresentationOutlined';
 import LowInventoryIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
 import TimeIcon from '@mui/icons-material/AccessTimeOutlined';
+
+import { DashboardSummaryResponse } from '../../interfaces';
 import { AdminLayout, SummaryTile } from "../../components";
 import styles from './Dashboard.module.css';
 
 const DashboardPage = () => {
+
+  const { data, error } = useSWR<DashboardSummaryResponse>('/api/admin/dashboard', {
+    refreshInterval: 30 * 1000 // 30 seconds
+  });
+
+  const [ refreshIn, setRefreshIn ] = useState(30);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRefreshIn(refreshIn => refreshIn > 0 ? refreshIn - 1 : 30);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.error(error);
+    return <Typography color="error">Error on load information</Typography>
+  }
+
+  const {
+    numberOfOrders,
+    paidOrders,
+    notPaidOrders,
+    numberOfClients,
+    numberOfProducts,
+    productsWithNoInventory,
+    lowInventory,
+  } = data!;
+
   return (
     <AdminLayout
       title="Dashboard"
@@ -21,7 +58,7 @@ const DashboardPage = () => {
     >
       <Grid container spacing={2}>
         <SummaryTile
-          title={15}
+          title={numberOfOrders}
           subTitle="Total Orders"
           icon={
             <CreditCardIcon
@@ -31,7 +68,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={2}
+          title={paidOrders}
           subTitle="Paid Orders"
           icon={
             <AttachMoneyIcon
@@ -41,7 +78,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={8}
+          title={notPaidOrders}
           subTitle="Pending Orders"
           icon={
             <CreditCardOffIcon
@@ -51,7 +88,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={4}
+          title={numberOfClients}
           subTitle="Clients"
           icon={
             <ClientsIcon
@@ -61,7 +98,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={25}
+          title={numberOfProducts}
           subTitle="Products"
           icon={
             <ProductsIcon
@@ -71,7 +108,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={25}
+          title={productsWithNoInventory}
           subTitle="Out Stock"
           icon={
             <OutStockIcon
@@ -81,7 +118,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={5}
+          title={lowInventory}
           subTitle="Low Inventory"
           icon={
             <LowInventoryIcon
@@ -91,8 +128,8 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={5}
-          subTitle="Update in:"
+          title={refreshIn}
+          subTitle="Refresh in:"
           icon={
             <TimeIcon
               color="secondary"

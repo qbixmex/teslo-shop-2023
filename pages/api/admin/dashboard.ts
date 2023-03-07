@@ -1,18 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '../../../database';
+import { DashboardSummaryResponse } from '../../../interfaces';
 import { User, Order, Product } from '../../../models';
 
 type Data =
   | { message: string }
-  | {
-    numberOfOrders: number;
-    paidOrders: number; // isPaid true
-    notPaidOrders: number;
-    numberOfClients: number; // Role Client
-    numberOfProducts: number;
-    productsWithNoInventory: number; // 0
-    lowInventory: number; // Products with 10 or less
-  };
+  | DashboardSummaryResponse;
 
 const handler = (
   request: NextApiRequest,
