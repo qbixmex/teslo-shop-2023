@@ -11,7 +11,9 @@ const MyApp = ({ Component, pageProps : { session, ...pageProps } }: AppProps) =
   return (
     <SessionProvider session={session}>
       <PayPalScriptProvider options={{
-        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT ?? ''
+        'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT ?? '',
+        currency: 'USD',
+        intent: 'capture',
       }}>
         <SWRConfig value={{
           fetcher: async (resource, init) => {

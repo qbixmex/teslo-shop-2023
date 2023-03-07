@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
+import axios from 'axios';
 import { PayPalButtons } from '@paypal/react-paypal-js';
 
 import {
@@ -108,7 +109,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                         purchase_units: [
                           {
                             amount: {
-                              value: "1.55",
+                              value: "1.99",
                             },
                           },
                         ],
@@ -121,6 +122,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                         alert(`Transaction completed by ${name}`);
                       });
                     }}
+                    onError={(error) => console.error(error)}
                   />
                 )}
               </Box>
