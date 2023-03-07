@@ -1,8 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
-import axios from 'axios';
-import { PayPalButtons } from '@paypal/react-paypal-js';
-
 import {
   Box, Card, CardContent, Chip,
   Divider, Grid, Typography
@@ -10,6 +7,7 @@ import {
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import CreditScoreIcon from '@mui/icons-material/CreditScoreOutlined';
 
+import { PayPalButtons } from '@paypal/react-paypal-js';
 import { dbOrders } from '../../database';
 import { IOrder, ISummary } from '../../interfaces';
 import { ShopLayout, CartList, OrderSummary } from '../../components';
@@ -108,16 +106,23 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                       return actions.order.create({
                         purchase_units: [
                           {
+                            description: 'T-Shirt',
                             amount: {
+                              currency_code: 'USD',
                               value: String(order.total),
                             },
                           },
                         ],
+                        application_context: {
+                          shipping_preference: 'NO_SHIPPING'
+                        }
                       });
                     }}
                     onApprove={(data, actions) => {
                       return actions.order!.capture().then((details) => {
+                        console.log("Details", details);
                         const name = details.payer.name?.given_name;
+                        console.log(`Order paid by: ${name}`);
                       });
                     }}
                     onError={(error) => console.error(error)}
