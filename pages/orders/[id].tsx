@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import {
   Box, Card, CardContent, Chip,
   Divider, Grid, Typography
@@ -12,10 +13,23 @@ import { dbOrders } from '../../database';
 import { IOrder, ISummary } from '../../interfaces';
 import { ShopLayout, CartList, OrderSummary } from '../../components';
 import styles from './order.module.css';
+import tesloAPI from '../../services/tesloAPI';
 
 type Props = { order: IOrder };
+  
+type OrderResponseBody = {
+  id: string;
+  status:
+    | "COMPLETED"
+    | "SAVED"
+    | "APPROVED"
+    | "VOIDED"
+    | "PAYER_ACTION_REQUIRED";
+}
 
 const OrderPage: NextPage<Props> = ({ order }) => {
+
+  const router = useRouter();
 
   const { orderItems, shippingAddress } = order;
 
@@ -24,6 +38,23 @@ const OrderPage: NextPage<Props> = ({ order }) => {
     subtotal: order.subtotal,
     tax: order.tax,
     total: order.total,
+  };
+
+  const onOrderCompleted = async (details: OrderResponseBody) => {
+    if (details.status !== 'COMPLETED') {
+      return alert('No payment was made on Paypal');
+    }
+
+    try {
+      await tesloAPI.post(`/orders/pay`, {
+        transactionId: details.id,
+        orderId: order._id,
+      });
+      router.reload();
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   };
 
   return (
@@ -118,14 +149,10 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                         }
                       });
                     }}
-                    onApprove={(data, actions) => {
-                      return actions.order!.capture().then((details) => {
-                        console.log("Details", details);
-                        const name = details.payer.name?.given_name;
-                        console.log(`Order paid by: ${name}`);
-                      });
+                    onApprove={async (data, actions) => {
+                      const details = await actions.order!.capture()
+                      onOrderCompleted(details);
                     }}
-                    onError={(error) => console.error(error)}
                   />
                 )}
               </Box>
