@@ -1,9 +1,17 @@
-const AdminPage = () => {
+import DashboardIcon from "@mui/icons-material/DashboardOutlined";
+import { AdminLayout } from "../../components";
+
+const DashboardPage = () => {
   return (
-    <>
-      AdminPage
-    </>
+    <AdminLayout
+      title="Dashboard"
+      description="Dashboard page"
+      subtitle="General Statistics"
+      icon={ <DashboardIcon /> }
+    >
+      <p>Dashboard Content</p>
+    </AdminLayout>
   );
 };
 
-export default AdminPage;
+export default DashboardPage;

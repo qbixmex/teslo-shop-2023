@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import AccountIcon from "@mui/icons-material/AccountCircleOutlined";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import DashboardIcon from "@mui/icons-material/DashboardOutlined";
 import CategoryIcon from "@mui/icons-material/CategoryOutlined";
 import ConfirmationIcon from "@mui/icons-material/ConfirmationNumberOutlined";
 import EscalatorWarningIcon from "@mui/icons-material/EscalatorWarningOutlined";
@@ -141,6 +142,13 @@ export const SideMenu = () => {
                 <Divider />
 
                 <ListSubheader>Admin Panel</ListSubheader>
+
+                <ListItemButton onClick={ () => navigateTo('/admin') }>
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItemButton>
 
                 <ListItemButton>
                   <ListItemIcon>
