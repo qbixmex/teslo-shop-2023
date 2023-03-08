@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET
   });
 
-  const validRoles = ['admin', 'super-user', 'SEO'];
+  const validRoles = ['admin', 'super-user', 'seo'];
 
   if (!session) {
     if (request.nextUrl.pathname.startsWith('/api/admin')) {
