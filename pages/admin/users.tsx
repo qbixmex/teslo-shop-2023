@@ -11,11 +11,7 @@ import { AdminLayout } from '../../components/layouts/AdminLayout';
 import styles from './Users.module.css';
 import tesloAPI from '../../services/tesloAPI';
 
-type Props = {
-  users: IUser[];
-};
-
-const UsersPage: NextPage<Props> = () => {
+const UsersPage: NextPage = () => {
 
   const { data, error } = useSWR<IUser[]>('/api/admin/users');
   const [ users, setUsers ] = useState<IUser[]>([]);
