@@ -11,6 +11,10 @@ export async function middleware(request: NextRequest) {
   const validRoles = ['admin', 'super-user', 'seo'];
 
   if (!session) {
+    if (request.nextUrl.pathname.startsWith('/api/admin/orders')) {
+      return NextResponse.next();
+    }
+
     if (request.nextUrl.pathname.startsWith('/api/admin')) {
       return new NextResponse(JSON.stringify({ message: 'Not Authorized' }), {
         status: 401,
