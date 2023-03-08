@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 
@@ -16,14 +17,26 @@ type Props = {
 
 const UsersPage: NextPage<Props> = () => {
 
-  const { data: users, error } = useSWR<IUser[]>('/api/admin/users');
+  const { data, error } = useSWR<IUser[]>('/api/admin/users');
+  const [ users, setUsers ] = useState<IUser[]>([]);
 
-  if (!users && !error) return (<></>);
+  useEffect(() => (data) && setUsers(data), [data]);
+
+  if (!data && !error) return (<></>);
 
   const onRoleUpdated = async (userId: string, newRole: string) => {
+    const previousUsers = users.map(user => ({ ...user }));
+    const updatedUsers = users.map(user => ({
+      ...user,
+      role: (userId === user._id) ? newRole : user.role,
+    }));
+
+    setUsers(updatedUsers as IUser[]);
+
     try {
       await tesloAPI.patch('/admin/users', { userId, role: newRole });
     } catch (error) {
+      setUsers(previousUsers);
       console.error('Cannot Update user role!');
       console.error(error);
     }
@@ -54,7 +67,7 @@ const UsersPage: NextPage<Props> = () => {
     },
   ];
 
-  const rows = users!.map((user, index) => {
+  const rows = users.map((user) => {
     return {
       id: user._id,
       email: user.email,

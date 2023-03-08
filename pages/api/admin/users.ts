@@ -54,7 +54,7 @@ const updateUsers = async (request: NextApiRequest, response: NextApiResponse<Da
   await user.save();
   await db.disconnect();
 
-  return response.status(200).json({ message: 'User Updated' });
+  return response.status(200).json({ message: `User "${user.name}" Updated` });
 };
 
 export default handler;
