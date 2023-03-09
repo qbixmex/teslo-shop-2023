@@ -83,7 +83,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     const newTag = newTagValue.trim().toLowerCase();
     setNewTagValue('');
     const currentTags = getValues('tags');
-    if (currentTags.includes('tags')) return;
+    if (currentTags.includes(newTag)) return;
     currentTags.push(newTag);
   };
 
