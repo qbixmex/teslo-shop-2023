@@ -3,9 +3,7 @@ import { db, SHOP_CONSTANTS } from '../../../database';
 import { Product } from '../../../models';
 import { IProduct } from '../../../interfaces';
 
-type Data =
-  | { message: string }
-  | IProduct[];
+type Data = { message: string } | IProduct | IProduct[];
 
  const handler = (
   request: NextApiRequest,
@@ -19,7 +17,7 @@ type Data =
   }
 };
 
-const getProducts = async (request: NextApiRequest, response: NextApiResponse) => {
+const getProducts = async (request: NextApiRequest, response: NextApiResponse<Data>) => {
   const { gender = 'all' } = request.query;
 
   let condition = {};
@@ -36,6 +34,5 @@ const getProducts = async (request: NextApiRequest, response: NextApiResponse) =
   
   response.status(200).json(products);
 }
-
 
 export default handler;
