@@ -36,8 +36,7 @@ export const AdminLayout: FC<Props> = (props) => {
       <main className={styles.main}>
         <Box className={styles.box}>
           <Typography variant="h1" component="h1">
-            { icon }
-            { title }
+            { icon }{ ' ' }{ title }
           </Typography>
           <Typography variant="h2">{ subtitle }</Typography>
         </Box>

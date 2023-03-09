@@ -6,10 +6,10 @@ import { Chip, Grid, Link, Typography } from '@mui/material';
 import ConfirmationIcon from '@mui/icons-material/ConfirmationNumberOutlined';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { AdminLayout } from '../../components';
+import { AdminLayout } from '../../../components';
+import { IOrder, IUser } from '../../../interfaces';
+import { format } from '../../../utils/currency';
 import styles from './Orders.module.css';
-import { IOrder, IUser } from '../../interfaces';
-import { format } from '../../utils/currency';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'Order ID', width: 250 },
