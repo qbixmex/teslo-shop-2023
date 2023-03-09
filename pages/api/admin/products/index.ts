@@ -23,7 +23,21 @@ const getProducts = async (
   response: NextApiResponse<Data>
 ) => {
   await db.connect();
-  const products = await Product.find().sort({ title: 'asc' }).select('-__v').lean();
+  const products = await Product
+    .find()
+    .sort({ title: 'asc' })
+    .select([
+      '_id',
+      'slug',
+      'images',
+      'title',
+      'gender',
+      'type',
+      'inStock',
+      'price',
+      'sizes'
+    ])
+    .lean();
   await db.disconnect();
 
   // TODO: Get product images
