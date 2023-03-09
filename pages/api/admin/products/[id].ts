@@ -1,10 +1,10 @@
 import { isValidObjectId } from 'mongoose';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '../../../../database';
-import { IOrder } from '../../../../interfaces/order';
-import { Order } from '../../../../models';
+import { IProduct } from '../../../../interfaces';
+import { Product } from '../../../../models';
 
-type Data = { message: string } | IOrder | IOrder[];
+type Data = { message: string } | IProduct;
 
 const handler = (
   request: NextApiRequest,
@@ -12,15 +12,16 @@ const handler = (
 ) => {
   switch (request.method) {
     case 'GET':
-      return getOrder(request, response);
+      return getProduct(request, response);
+    case 'PATCH':
     default:
       return response.status(400).json({ message: 'Unknown Request!' });
   }  
 };
 
-const getOrder = async (
+const getProduct = async (
   request: NextApiRequest,
-  response: NextApiResponse<Data>
+  response: NextApiResponse
 ) => {
   const id = request.query.id as string;
 
@@ -29,19 +30,15 @@ const getOrder = async (
   }
 
   await db.connect();
-  const order = await Order
-    .findById({ _id: id })
-    .select('-__v')
-    .populate('user', 'name email')
-    .lean();  
+  const product = await Product.findById({ _id: id }).select('-__v').lean();
   await db.disconnect();
 
-  if (!order) {
+  if (!product) {
     return response.status(404)
       .json({ message: `Order with ID: "${id}" not found!` });
   }
 
-  return response.status(200).json(order);
+  return response.status(200).json(product);
 };
 
 export default handler;
