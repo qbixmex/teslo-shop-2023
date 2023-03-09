@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -51,6 +51,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     defaultValues: product
   });
 
+  const [ newTagValue, setNewTagValue ] = useState('');
+
   useEffect(() => {
     const subscription = watch((value, {name, type}) => {
       if (name === 'title') {
@@ -77,8 +79,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('sizes', [ ...currentSizes, size ], { shouldValidate: true });
   };
 
+  const onNewTag = () => {
+    const newTag = newTagValue.trim().toLowerCase();
+    setNewTagValue('');
+    const currentTags = getValues('tags');
+    if (currentTags.includes('tags')) return;
+    currentTags.push(newTag);
+  };
+
   const onDeleteTag = ( tag: string ) => {
-    // ...logic
+    const updatedTags = getValues('tags').filter(t => t !== tag);
+    setValue('tags', updatedTags, { shouldValidate: true });
   };
 
   const onSubmit = (form: FormData) => {
@@ -256,6 +267,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               fullWidth 
               sx={{ mb: 1 }}
               helperText="Press [spacebar] to add"
+              autoComplete="off"
+              value={ newTagValue }
+              onChange={ ({target}) => setNewTagValue(target.value) }
+              onKeyUp={ ({ code }) => code === 'Space' ? onNewTag() : undefined }
             />
               
             <Box
@@ -265,10 +280,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 listStyle: 'none',
                 p: 0,
                 m: 0,
-              }} component="ul"
+              }}
+              component="ul"
             >
               {
-                product.tags.map((tag) => {
+                getValues('tags').map(tag => {
                   return (
                     <Chip
                       key={tag}
