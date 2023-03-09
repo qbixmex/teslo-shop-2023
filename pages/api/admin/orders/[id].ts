@@ -13,10 +13,6 @@ const handler = (
   switch (request.method) {
     case 'GET':
       return getOrder(request, response);
-    case 'PATCH':
-      return updateOrder(request, response);
-    case 'DELETE':
-      return deleteOrder(request, response);
     default:
       return response.status(400).json({ message: 'Unknown Request!' });
   }  
@@ -46,22 +42,6 @@ const getOrder = async (
   }
 
   return response.status(200).json(order);
-};
-
-const updateOrder = (
-  request: NextApiRequest,
-  response: NextApiResponse
-) => {
-  const id = request.query.id as string;
-  return response.status(200).json({ message: `Update Order ID: ${id}` });
-};
-
-const deleteOrder = (
-  request: NextApiRequest,
-  response: NextApiResponse
-) => {
-  const id = request.query.id as string;
-  return response.status(200).json({ message: `Delete Order ID: ${id}` });
 };
 
 export default handler;

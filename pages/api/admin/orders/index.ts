@@ -12,8 +12,6 @@ const handler = (
   switch (request.method) {
     case 'GET':
       return getOrders(request, response);
-    case 'POST':
-      return createOrder(request, response);
     default:
       return response.status(400).json({ message: 'Unknown Request!' });
   }  
@@ -33,13 +31,6 @@ const getOrders = async (
   await db.disconnect();
 
   return response.status(200).json(orders);
-};
-
-const createOrder = (
-  request: NextApiRequest,
-  response: NextApiResponse
-) => {
-  return response.status(201).json({ message: 'Create Order' });
 };
 
 export default handler;
