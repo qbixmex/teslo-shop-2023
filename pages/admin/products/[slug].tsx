@@ -32,20 +32,22 @@ type FormData = {
   title: string;
   type: IType;
   gender: ValidGenders;
-}
+};
 
 type Props = {
   product: IProduct;
 };
 
-const ProductAdminPage:FC<Props> = ({ product }) => {
+const ProductAdminPage: FC<Props> = ({ product }) => {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors }
+    getValues,
+    setValue,
+    formState: { errors },
   } = useForm<FormData>({
-    defaultValues: product,
+    defaultValues: product
   });
 
   const onDeleteTag = ( tag: string ) => {
@@ -88,30 +90,21 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
               error={ !!errors.title }
               helperText={ errors.title?.message }
             />
-            <Controller
-              name="description"
-              rules={{
-                required: 'This field is required',
-                minLength: {
-                  value: 8,
-                  message: 'You must type at least 8 characters!'
-                }
-              }}
-              control={control}
-              defaultValue=""
-              render={({field}) => (
-                <TextField
-                  {...field}
-                  label="Description"
-                  variant="filled"
-                  fullWidth
-                  multiline
-                  sx={{ mb: 1 }}
-                  error={ !!errors.description }
-                  helperText={ errors.description?.message }
-                />
-              )}
-            />
+
+              <TextField
+                label="Description"
+                variant="filled"
+                fullWidth
+                multiline
+                rows={5}
+                sx={{ mb: 1 }}
+                { ...register('description', {
+                  required: 'Field is required!',
+                  minLength: { value: 8, message: 'You must type at least 8 characters!' }
+                })}
+                error={ !!errors.description }
+                helperText={ errors.description?.message }
+              />
 
             <TextField
               label="Inventory"
@@ -143,32 +136,40 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
 
             <Divider sx={{ my: 1 }} />
 
-            <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Type</FormLabel>
-              <RadioGroup
-                row
-                // value={ status }
-                // onChange={ onStatusChanged }
-              >
-                {
-                  validTypes.map( option => (
-                    <FormControlLabel 
-                      key={ option }
-                      value={ option }
-                      control={ <Radio color='secondary' /> }
-                      label={ capitalize(option) }
-                    />
-                  ))
-                }
-              </RadioGroup>
-            </FormControl>
+            <Controller
+              name="type"
+              control={control}
+              defaultValue={undefined}
+              render={({field}) => (
+                <FormControl sx={{ mb: 1 }}>
+                  <FormLabel>Type</FormLabel>
+                  <RadioGroup row { ...field }>
+                    {
+                      validTypes.map( option => (
+                        <FormControlLabel 
+                          key={ option }
+                          value={ option }
+                          control={ <Radio color='secondary' /> }
+                          label={ capitalize(option) }
+                        />
+                      ))
+                    }
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
 
             <FormControl sx={{ mb: 1 }}>
               <FormLabel>Gender</FormLabel>
-              <RadioGroup
-                row
-                // value={ status }
-                // onChange={ onStatusChanged }
+              <RadioGroup row
+                value={ getValues('gender') }
+                onChange={({target}) => {
+                  setValue(
+                    'gender',
+                    target.value as ValidGenders,
+                    { shouldValidate: true }
+                  )
+                }}
               >
                 {
                   validGender.map( option => (
