@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
+import NextLink from 'next/link';
 import useSWR from 'swr';
 
-import { CardMedia, Grid, Typography } from '@mui/material';
+import { CardMedia, Grid, Link, Typography } from '@mui/material';
 import CategoryIcon from '@mui/icons-material/CategoryOutlined';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
@@ -42,7 +43,16 @@ const columns: GridColDef[] = [
       )
     }
   },
-  { field: 'sizes', headerName: 'Sizes', width: 250 },
+  { field: 'sizes', headerName: 'Sizes'},
+  {
+    field: 'edit',
+    width: 125,
+    renderCell: (params) => (
+      <NextLink href={`/admin/products/${params.row.slug}`} passHref legacyBehavior>
+        <Link className={styles.link}>Edit Product</Link>
+      </NextLink>
+    )
+  },
 ];
 
 const ProductsPage: NextPage = () => {

@@ -4,16 +4,16 @@
 }
 
 .link {
-  color: var(--blue);
-  border: solid 1px var(--blue);
+  color: var(--orange) !important;
+  border: solid 1px var(--orange);
   padding: 5px 8px;
   border-radius: 10px;
   transition: all 0.25s ease-in-out;
 }
 
 .link:hover {
-  color: #fff;
-  background-color: var(--blue);
+  color: #fff !important;
+  background-color: var(--orange);
 }
 
 .total {
