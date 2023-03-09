@@ -15,6 +15,7 @@ import DiveFileRenameIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { IProduct, ISize, IType, ValidGenders } from '../../../interfaces';
 import { AdminLayout } from '../../../components';
 import { dbProducts } from '../../../database';
+import tesloAPI from '../../../services/tesloAPI';
 
 const validTypes  = ['shirts','pants','hoodies','hats'];
 const validGender = ['men','women','kid','unisex'];
@@ -52,6 +53,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   });
 
   const [ newTagValue, setNewTagValue ] = useState('');
+  const [ isSaving, setIsSaving ] = useState(false);
 
   useEffect(() => {
     const subscription = watch((value, {name, type}) => {
@@ -92,8 +94,25 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
-  const onSubmit = (form: FormData) => {
-    console.log(form);
+  const onSubmit = async (form: FormData) => {
+    if (form.images.length < 2) return;
+    setIsSaving(true);
+    try {
+      const { data } = await tesloAPI({
+        url: `/admin/products/${product._id}`,
+        method: 'PATCH', // TODO: Evaluate POST or Patch
+        data: form
+      });
+      console.log(data);
+      if (!form._id) {
+        // TODO: Reload Browser
+      } else {
+        setIsSaving(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -110,6 +129,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             startIcon={ <SaveIcon /> }
             sx={{ width: '150px' }}
             type="submit"
+            disabled={isSaving}
           >Save</Button>
         </Box>
 
