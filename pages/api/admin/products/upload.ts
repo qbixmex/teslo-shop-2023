@@ -1,9 +1,13 @@
 import fs from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
-import { db } from '../../../../database';
-import { IProduct } from '../../../../interfaces';
-import { Product } from '../../../../models';
+import { v2 as cloudinary } from 'cloudinary';
+// import { db } from '../../../../database';
+// import { IProduct } from '../../../../interfaces';
+// import { Product } from '../../../../models';
+
+//* CLOUDINARY CONFIGURATION
+cloudinary.config( process.env.CLOUDINARY_URL ?? '');
 
 type Data = { message: string };
 
@@ -22,32 +26,34 @@ const handler = (request: NextApiRequest, response: NextApiResponse<Data>) => {
   }  
 };
 
-const saveFile = (file: formidable.File) => {
-  const data = fs.readFileSync(file.filepath);
-  fs.writeFileSync(`./public/${file.originalFilename}`, data);
+//* File System Save Image
+//? const saveFile = (file: formidable.File) => {
+//?   const data = fs.readFileSync(file.filepath);
+//?   fs.writeFileSync(`./public/${file.originalFilename}`, data);
+//?   fs.unlinkSync(file.filepath); // Delete temporary file
+//?   return;
+//? };
+
+const saveFile = async (file: formidable.File) => {
+  const data = await cloudinary.uploader.upload(file.filepath);
   fs.unlinkSync(file.filepath); // Delete temporary file
-  return;
+  return data.secure_url;
 };
 
-const parseFiles = (request: NextApiRequest): Promise<any> => {
+const parseFiles = (request: NextApiRequest): Promise<string> => {
   return new Promise(async (resolve, reject) => {
-
-    const form = new formidable.IncomingForm();    
-
+    const form = new formidable.IncomingForm();
     form.parse(request, async (error, fields, files) => {
-      console.log({ error, fields, files });
       if (error) return reject(error);
-      await saveFile(files.file as formidable.File);
+      const fileURL = await saveFile(files.file as formidable.File);
+      resolve(fileURL);
     });
-
-    resolve(true);
-
   });
 };
 
 const uploadFile = async (request: NextApiRequest, response: NextApiResponse<Data>) => {
-  await parseFiles(request);
-  return response.status(200).json({ message: 'Image Uploaded!' });
+  const imageURL = await parseFiles(request);
+  return response.status(200).json({ message: imageURL });
 };
 
 export default handler;
