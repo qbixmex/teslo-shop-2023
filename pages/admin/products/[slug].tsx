@@ -129,6 +129,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           });
           setTimeout(() => router.replace(`/admin/products`), 2000);
         }
+        setIsDeleting(false);
       });
     } catch (error) {
       console.error(error);

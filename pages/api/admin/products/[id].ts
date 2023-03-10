@@ -110,7 +110,7 @@ const updateProduct = async (
         .json({ message: `Product with ID: "${id}" not found!` });
     }
 
-    //* Delete pictures from "Cloudinary"
+    //* Delete images from "Cloudinary"
     product.images.forEach(async (image) => {
       if (!images.includes(image)) {
         const [ fileId ] = image.substring(image.lastIndexOf('/') + 1).split('.');
@@ -156,7 +156,11 @@ const deleteProduct = async (
         .json({ message: `Product with ID: "${id}" not found!` });
     }
 
-    // TODO: Delete pictures (Cloudinary or Filesystem)
+    //* Delete images from "Cloudinary"
+    product.images.forEach(async (image) => {
+      const [ fileId ] = image.substring(image.lastIndexOf('/') + 1).split('.');
+      await cloudinary.uploader.destroy(fileId);
+    });
 
     await db.disconnect();
 

@@ -15,11 +15,10 @@ export const ProductSlideShow = ({ images }: Props) => {
   return (
     <Slide { ...transitionProps }>
       { images.map(image => {
-        const url = image;
         return (
           <div className={styles['each-slide']} key={image}>
             <div style={{
-              backgroundImage: `url(${ url })`,
+              backgroundImage: `url(${ image })`,
               backgroundSize: 'cover'
             }}>
             </div>
