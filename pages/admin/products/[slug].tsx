@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
@@ -45,6 +45,7 @@ type Props = {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -55,7 +56,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: product
-  });
+  }); 
 
   const [ newTagValue, setNewTagValue ] = useState('');
   const [ isSaving, setIsSaving ] = useState(false);
@@ -133,6 +134,22 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       console.error(error);
       setIsDeleting(false);
     }
+  };
+
+  const onFilesSelected = ({target}: ChangeEvent<HTMLInputElement>) => {    
+    if (!target.files || target.files.length === 0) return;
+
+    console.log(target.files);
+
+    try {
+      for (const file of target.files) {
+        // const formData = new FormData();
+        console.log( file );
+      }
+    } catch(error) {
+      console.error(error);
+    }
+
   };
 
   const onSubmit = async (form: FormData) => {
@@ -391,9 +408,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 fullWidth
                 startIcon={ <UploadIcon /> }
                 sx={{ mb: 3 }}
-              >
-                Load Image
-              </Button>
+                onClick={ () => fileInputRef.current?.click() }
+              >Load Image</Button>
+
+              <input
+                ref={ fileInputRef }
+                type="file"
+                multiple
+                accept='image/png, image/gif, image/jpeg'
+                style={{ display: 'none' }}
+                onChange={ onFilesSelected }
+              />
 
               <Chip 
                 label="You need to add at least 2 images"
