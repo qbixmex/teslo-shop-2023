@@ -2,9 +2,6 @@ import fs from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import { v2 as cloudinary } from 'cloudinary';
-// import { db } from '../../../../database';
-// import { IProduct } from '../../../../interfaces';
-// import { Product } from '../../../../models';
 
 //* CLOUDINARY CONFIGURATION
 cloudinary.config( process.env.CLOUDINARY_URL ?? '');

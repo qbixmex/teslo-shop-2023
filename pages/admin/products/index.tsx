@@ -16,14 +16,14 @@ const columns: GridColDef[] = [
   {
     field: 'image',
     headerName: 'Image',
-    renderCell: (props) => {
+    renderCell: (params) => {
       return (
-        <a href={`/product/${props.row.slug}`} target="_blank" rel="noreferrer">
+        <a href={`/product/${params.row.slug}`} target="_blank" rel="noreferrer">
           <CardMedia
             component='img'
             className='fadeIn'
-            image={`/products/${props.row.image}`}
-            alt={props.row.title}
+            image={params.row.image}
+            alt={params.row.title}
           />
         </a>
       );

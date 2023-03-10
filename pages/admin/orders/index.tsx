@@ -56,7 +56,7 @@ const columns: GridColDef[] = [
 const OrdersPage: NextPage = () => {
   const { data, error } = useSWR<IOrder[]>('/api/admin/orders');
 
-  if (!data && !error) return (<></>);  
+  if (!data && !error) return (<></>);
 
   const rows = data!.map(order => {
     return {

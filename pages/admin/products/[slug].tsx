@@ -144,12 +144,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         const formData = new FormData();
         formData.append('file', file);
         const { data } = await tesloAPI.post<{ message: string }>('/admin/products/upload', formData);
-        console.log(data);
+        setValue('images', [...getValues('images'), data.message], { shouldValidate: true })
       }
     } catch(error) {
       console.error(error);
     }
 
+  };
+
+  const onDeleteImage = (image: string) => {
+    setValue(
+      'images',
+      getValues('images').filter(img => img !== image),
+      { shouldValidate: true },
+    );
   };
 
   const onSubmit = async (form: FormData) => {
@@ -420,25 +428,33 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 onChange={ onFilesSelected }
               />
 
-              <Chip 
-                label="You need to add at least 2 images"
-                color='error'
-                variant='outlined'
-              />
+              {
+                (getValues('images').length < 2) && (
+                  <Chip 
+                    label="You need to add at least 2 images"
+                    color='error'
+                    variant='outlined'                
+                  />
+                )
+              }
 
               <Grid container spacing={2}>
                 {
-                  product.images.map( img => (
+                  getValues('images').map( img => (
                     <Grid item xs={4} sm={3} key={img}>
                       <Card>
                         <CardMedia 
                           component='img'
                           className='fadeIn'
-                          image={ `/products/${ img }` }
+                          image={ img }
                           alt={ img }
                         />
                         <CardActions>
-                          <Button fullWidth color="error">Delete</Button>
+                          <Button
+                            fullWidth
+                            color="error"
+                            onClick={ () => onDeleteImage(img) }
+                          >Delete</Button>
                         </CardActions>
                       </Card>
                     </Grid>
@@ -464,7 +480,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (slug === 'new') {
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
     delete tempProduct._id;
-    tempProduct.images = ['img1.jpg', 'img2.jpg'];
+    tempProduct.images = [];
     product = tempProduct;
   } else {
     product = await dbProducts.getProductBySlug(slug.toString());

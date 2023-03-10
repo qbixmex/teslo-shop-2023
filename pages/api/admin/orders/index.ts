@@ -3,7 +3,7 @@ import { db } from '../../../../database';
 import { IOrder } from '../../../../interfaces/order';
 import { Order } from '../../../../models';
 
-type Data = { message: string } | IOrder | IOrder[];
+type Data = { message: string } | IOrder[];
 
 const handler = (
   request: NextApiRequest,
@@ -17,10 +17,7 @@ const handler = (
   }  
 };
 
-const getOrders = async (
-  request: NextApiRequest,
-  response: NextApiResponse
-) => {
+const getOrders = async ( request: NextApiRequest, response: NextApiResponse<Data> ) => {
   await db.connect();
   const orders = await Order
     .find()

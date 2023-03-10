@@ -1,8 +1,13 @@
 import { isValidObjectId } from 'mongoose';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { v2 as cloudinary } from 'cloudinary';
+
 import { db } from '../../../../database';
 import { IProduct } from '../../../../interfaces';
 import { Product } from '../../../../models';
+
+//* CLOUDINARY CONFIGURATION
+cloudinary.config( process.env.CLOUDINARY_URL ?? '');
 
 type Data = { message: string } | IProduct;
 
@@ -94,24 +99,34 @@ const updateProduct = async (
     return response.status(400).json({ message: "You must include at least 2 images!" });
   }
 
-  // TODO: Handle images
-
   try {
     await db.connect();
 
-    const product = await Product.findOneAndUpdate({ _id: id }, request.body, { new: true });
+    const product = await Product.findById(id);
 
     if (!product) {
       await db.disconnect();
       return response.status(404)
-        .json({ message: `Order with ID: "${id}" not found!` });
+        .json({ message: `Product with ID: "${id}" not found!` });
     }
 
-    // TODO: Delete pictures (Cloudinary)
+    //* Delete pictures from "Cloudinary"
+    product.images.forEach(async (image) => {
+      if (!images.includes(image)) {
+        const [ fileId ] = image.substring(image.lastIndexOf('/') + 1).split('.');
+        await cloudinary.uploader.destroy(fileId);
+      }
+    });
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id },
+      request.body,
+      { new: true }
+    ) as IProduct;
 
     await db.disconnect();
 
-    return response.status(200).json(product);
+    return response.status(200).json(updatedProduct);
 
   } catch (error) {
     console.log(error);
@@ -138,7 +153,7 @@ const deleteProduct = async (
     if (!product) {
       await db.disconnect();
       return response.status(404)
-        .json({ message: `Order with ID: "${id}" not found!` });
+        .json({ message: `Product with ID: "${id}" not found!` });
     }
 
     // TODO: Delete pictures (Cloudinary or Filesystem)
