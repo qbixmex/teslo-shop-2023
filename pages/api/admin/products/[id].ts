@@ -13,6 +13,8 @@ const handler = (
   switch (request.method) {
     case 'GET':
       return getProduct(request, response);
+    case 'POST':
+      return createProduct(request, response);
     case 'PATCH':
       return updateProduct(request, response);
     default:
@@ -40,6 +42,39 @@ const getProduct = async (
   }
 
   return response.status(200).json(product);
+};
+
+const createProduct = async (request: NextApiRequest, response: NextApiResponse<Data>) => {
+  const { images = [], slug = '' } = request.body as IProduct;
+
+  if (images.length < 2) {
+    return response.status(400).json({ message: "You must include at least 2 images!" });
+  }  
+
+  try {
+    await db.connect();
+
+    const productInDB = await Product.findOne({ slug }).lean();
+
+    if (productInDB) {
+      await db.disconnect();
+      return response.status(400).json({ message: `Product with slug "${slug}" already exists!` });
+    }
+
+    const product = new Product(request.body);
+
+    //* Save new product on database
+    product.save();
+
+    await db.disconnect();
+
+    return response.status(201).json(product);
+
+  } catch (error) {
+    console.log(error);
+    await db.disconnect();
+    return response.status(400).json({ message: 'Check console error logs!' });
+  }
 };
 
 const updateProduct = async (

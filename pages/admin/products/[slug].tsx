@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
@@ -12,6 +13,7 @@ import SaveIcon from '@mui/icons-material/SaveOutlined';
 import UploadIcon from '@mui/icons-material/UploadOutlined';
 import DiveFileRenameIcon from '@mui/icons-material/DriveFileRenameOutline';
 
+import { Product } from '../../../models';
 import { IProduct, ISize, IType, ValidGenders } from '../../../interfaces';
 import { AdminLayout } from '../../../components';
 import { dbProducts } from '../../../database';
@@ -40,6 +42,7 @@ type Props = {
 };
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -96,16 +99,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 2) return;
+
     setIsSaving(true);
+
     try {
       const { data } = await tesloAPI({
         url: `/admin/products/${product._id}`,
-        method: 'PATCH', // TODO: Evaluate POST or Patch
+        method: form._id ? 'PATCH' : 'POST',
         data: form
       });
+
       console.log(data);
+
       if (!form._id) {
-        // TODO: Reload Browser
+        router.replace(`/admin/products/${form.slug}`);
       } else {
         setIsSaving(false);
       }
@@ -370,7 +377,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { slug = ''} = query;
-  const product = await dbProducts.getProductBySlug(slug.toString());
+
+  let product: IProduct | null;
+
+  if (slug === 'new') {
+    const tempProduct = JSON.parse(JSON.stringify(new Product()));
+    delete tempProduct._id;
+    tempProduct.images = ['img1.jpg', 'img2.jpg'];
+    product = tempProduct;
+  } else {
+    product = await dbProducts.getProductBySlug(slug.toString());
+  }
 
   if ( !product ) {
     return {

@@ -2,8 +2,9 @@ import { NextPage } from 'next';
 import NextLink from 'next/link';
 import useSWR from 'swr';
 
-import { CardMedia, Grid, Link, Typography } from '@mui/material';
+import { Box, Button, CardMedia, Grid, Link, Typography } from '@mui/material';
 import CategoryIcon from '@mui/icons-material/CategoryOutlined';
+import AddIcon from '@mui/icons-material/AddOutlined';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { AdminLayout } from '../../../components';
@@ -81,6 +82,14 @@ const ProductsPage: NextPage = () => {
       subtitle="Products Maintenance"
       icon={<CategoryIcon />}
     >
+      <Box className={styles['box-button']}>
+        <Button
+          startIcon={<AddIcon />}
+          color="secondary"
+          href="/admin/products/new"
+        >Create Product</Button>
+      </Box>
+
       <Grid container className="fadeIn">
         <Grid item xs={12} className={styles.item}>
           <DataGrid
