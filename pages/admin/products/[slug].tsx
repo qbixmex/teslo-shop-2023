@@ -166,13 +166,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setIsSaving(true);
 
     try {
-      const { data } = await tesloAPI({
+      await tesloAPI({
         url: `/admin/products/${product._id}`,
         method: form._id ? 'PATCH' : 'POST',
         data: form
       });
-
-      console.log(data);
 
       if (!form._id) {
         Swal.fire({
@@ -184,6 +182,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         })
         setTimeout(() => router.replace(`/admin/products/${form.slug}`), 2000);
       } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Product has been updated',
+          showConfirmButton: false,
+          timer: 2000
+        });
         setIsSaving(false);
       }
     } catch (error) {
