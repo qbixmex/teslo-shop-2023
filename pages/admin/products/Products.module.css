@@ -9,7 +9,7 @@
   width: 100%;
 }
 
-.link {
+.edit {
   color: var(--orange) !important;
   border: solid 1px var(--orange);
   padding: 5px 8px;
@@ -17,9 +17,23 @@
   transition: all 0.25s ease-in-out;
 }
 
-.link:hover {
+.edit:hover {
   color: #fff !important;
   background-color: var(--orange);
+}
+
+.delete {
+  font-weight: normal !important;
+  color: var(--red) !important;
+  border: solid 1px var(--red) !important;
+  padding: 5px 8px;
+  border-radius: 10px;
+  transition: all 0.25s ease-in-out;
+}
+
+.delete:hover {
+  color: #fff !important;
+  background-color: var(--red) !important;
 }
 
 .total {

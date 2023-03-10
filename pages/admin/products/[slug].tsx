@@ -10,8 +10,10 @@ import {
   Grid, Radio, RadioGroup, TextField
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/SaveOutlined';
+import GarbageIcon from '@mui/icons-material/DeleteOutlined';
 import UploadIcon from '@mui/icons-material/UploadOutlined';
 import DiveFileRenameIcon from '@mui/icons-material/DriveFileRenameOutline';
+import Swal from 'sweetalert2';
 
 import { Product } from '../../../models';
 import { IProduct, ISize, IType, ValidGenders } from '../../../interfaces';
@@ -57,6 +59,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const [ newTagValue, setNewTagValue ] = useState('');
   const [ isSaving, setIsSaving ] = useState(false);
+  const [ isDeleting, setIsDeleting ] = useState(false);
 
   useEffect(() => {
     const subscription = watch((value, {name, type}) => {
@@ -97,6 +100,41 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
+  const onDeleteProduct = () => {
+    setIsDeleting(true);
+
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You cannot recover this product!",
+        icon: 'warning',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const { data } = await tesloAPI({
+            url: `/admin/products/${product._id}`,
+            method: 'DELETE',
+          }) as { data: { message: string; }};
+          Swal.fire({
+            title: 'Deleted!',
+            text: data.message,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          setTimeout(() => router.replace(`/admin/products`), 2000);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      setIsDeleting(false);
+    }
+  };
+
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 2) return;
 
@@ -112,7 +150,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       console.log(data);
 
       if (!form._id) {
-        router.replace(`/admin/products/${form.slug}`);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Product has been created',
+          showConfirmButton: false,
+          timer: 2000
+        })
+        setTimeout(() => router.replace(`/admin/products/${form.slug}`), 2000);
       } else {
         setIsSaving(false);
       }
@@ -130,7 +175,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       icon={<DiveFileRenameIcon />}
     >
       <form onSubmit={ handleSubmit(onSubmit) }>
-        <Box display='flex' justifyContent='end' sx={{ mb: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mb: 2 }}>
           <Button 
             color="secondary"
             startIcon={ <SaveIcon /> }
@@ -138,6 +183,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             type="submit"
             disabled={isSaving}
           >Save</Button>
+          { product._id && (
+              <Button 
+                color="error"
+                startIcon={ <GarbageIcon /> }
+                sx={{ width: '150px' }}
+                type="button"
+                disabled={isDeleting}
+                onClick={onDeleteProduct}
+              >Delete</Button>
+            )
+          }
         </Box>
 
         <Grid container spacing={2}>

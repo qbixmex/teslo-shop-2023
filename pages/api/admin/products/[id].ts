@@ -17,6 +17,8 @@ const handler = (
       return createProduct(request, response);
     case 'PATCH':
       return updateProduct(request, response);
+    case 'DELETE':
+      return deleteProduct(request, response);
     default:
       return response.status(400).json({ message: 'Unknown Request!' });
   }  
@@ -110,6 +112,40 @@ const updateProduct = async (
     await db.disconnect();
 
     return response.status(200).json(product);
+
+  } catch (error) {
+    console.log(error);
+    await db.disconnect();
+    return response.status(400).json({ message: 'Check console error logs!' });
+  }  
+};
+
+const deleteProduct = async (
+  request: NextApiRequest,
+  response: NextApiResponse<Data>
+) => {
+  const id = request.query.id as string;
+
+  if (!isValidObjectId(id)) {
+    return response.status(400).json({ message: `${id} - Is not a valid "Mongo ID"` });
+  }
+
+  try {
+    await db.connect();
+
+    const product = await Product.findOneAndDelete({ _id: id });
+
+    if (!product) {
+      await db.disconnect();
+      return response.status(404)
+        .json({ message: `Order with ID: "${id}" not found!` });
+    }
+
+    // TODO: Delete pictures (Cloudinary or Filesystem)
+
+    await db.disconnect();
+
+    return response.status(200).json({ message: `Product Deleted Successfully` });
 
   } catch (error) {
     console.log(error);

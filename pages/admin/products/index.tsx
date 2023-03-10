@@ -47,11 +47,13 @@ const columns: GridColDef[] = [
   { field: 'sizes', headerName: 'Sizes'},
   {
     field: 'edit',
-    width: 125,
+    headerName: '',
     renderCell: (params) => (
-      <NextLink href={`/admin/products/${params.row.slug}`} passHref legacyBehavior>
-        <Link className={styles.link}>Edit Product</Link>
-      </NextLink>
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <NextLink href={`/admin/products/${params.row.slug}`} passHref legacyBehavior>
+          <Link className={styles.edit}>Edit</Link>
+        </NextLink>
+      </Box>
     )
   },
 ];

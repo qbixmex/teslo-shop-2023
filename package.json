@@ -1,6 +1,6 @@
 {
   "name": "teslo_shop",
-  "version": "11.11.0",
+  "version": "11.12.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -26,6 +26,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.2",
     "react-slideshow-image": "^4.2.1",
+    "sweetalert2": "^11.7.3",
     "swr": "^2.0.4"
   },
   "devDependencies": {
